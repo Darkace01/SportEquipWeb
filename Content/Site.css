@@ -22,3 +22,49 @@ select,
 textarea {
     max-width: 280px;
 }
+
+.event-btn {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 15px;
+    padding-right: 15px;
+    background-color: #5cb85c;
+    width: 100%;
+    color: white;
+    border-radius: 0 !important;
+    box-shadow: .05px .1px #888888;
+    margin: 0;
+    font-size: 1.9rem;
+}
+
+.event-card-title {
+    font-weight: 600;
+    font-size: 2.5rem;
+}
+
+.event-list-group-item {
+    display: block;
+    font-size: 1.6rem;
+}
+
+.event-card-header {
+    padding: 0 5px;
+}
+
+.event-card {
+    border: 1px solid #ddd;
+}
+
+.event-list-group {
+    padding: 0 5px;
+    border-top: 1px solid #ddd;
+}
+
+.event-sort {
+    font-size: 1.9rem !important;
+}
+
+.event-search {
+    width: auto;
+    border-radius: 0;
+}

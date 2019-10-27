@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using SportEquipWeb.Data;
 using SportEquipWeb.Models.Core;
 
 namespace SportEquipWeb.Models
@@ -24,6 +25,7 @@ namespace SportEquipWeb.Models
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
         {
+            Database.SetInitializer(new DbInitializer());
         }
 
         public DbSet<Equipment> Equipment { get; set; }

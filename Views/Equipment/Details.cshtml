@@ -47,12 +47,13 @@
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.ImgPath)
+            <img class="img-responsive" src="@Url.Content(Model.ImgPath)">
         </dd>
 
     </dl>
 </div>
 <p>
+    @Html.ActionLink("Delete", "Delete", new { id = Model.Id }, htmlAttributes: new { @class = "" }) |
     @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
     @Html.ActionLink("Back to List", "Index")
 </p>

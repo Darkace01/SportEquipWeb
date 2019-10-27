@@ -19,11 +19,26 @@ namespace SportEquipWeb.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Equipment
-        [Authorize(Roles = "Owner,Admin,User")]
-        public ActionResult Index()
+        //[Authorize(Roles = "Owner,Admin,User")]
+        public ActionResult Index(string searchString)
         {
             var equipment = db.Equipment.ToList();
-            foreach(var item in equipment)
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                try
+                {
+                    equipment = equipment.Where(s => s.Name.ToLower().Contains(searchString.ToLower())
+                                                 || s.Owner.UserName.ToLower().Contains(searchString.ToLower())
+                                                 || s.Category.Name.ToLower().Contains(searchString.ToLower())
+                                                 ).ToList();
+                }
+                catch (Exception ex)
+                {
+
+                    throw;
+                }
+            }
+            foreach (var item in equipment)
             {
                 int res = item.AvailableDate.CompareTo(DateTime.Now);
                 if (res > 0)

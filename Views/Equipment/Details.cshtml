@@ -37,9 +37,25 @@
         <dt>
             @Html.DisplayNameFor(model => model.AvailableDate)
         </dt>
-
         <dd>
             @Html.DisplayFor(model => model.AvailableDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.IsAvaible)
+        </dt>
+        <dd>
+            @{
+                string available;
+                if (Model.IsAvaible == false)
+                {
+                    available = "Yes";
+                }
+                else
+                {
+                    available = "No";
+                }
+            }
+            @available
         </dd>
 
         <dt>

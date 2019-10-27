@@ -22,7 +22,22 @@ namespace SportEquipWeb.Controllers
         [Authorize(Roles = "Owner,Admin,User")]
         public ActionResult Index()
         {
-            return View(db.Equipment.ToList());
+            var equipment = db.Equipment.ToList();
+            foreach(var item in equipment)
+            {
+                int res = item.AvailableDate.CompareTo(DateTime.Now);
+                if (res > 0)
+                {
+                    item.IsAvaible = false;
+                }
+                else if (res == 0)
+                {
+                    item.IsAvaible = false;
+                }
+                else
+                    item.IsAvaible = true;
+            }
+            return View(equipment);
         }
 
         // GET: Equipment/Details/5
@@ -34,6 +49,17 @@ namespace SportEquipWeb.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Equipment equipment = db.Equipment.Find(id);
+
+            int res = equipment.AvailableDate.CompareTo(DateTime.Now);
+            if (res > 0)
+            {
+                equipment.IsAvaible = false;
+            }else if(res == 0){
+                equipment.IsAvaible = false;
+            }
+            else
+                equipment.IsAvaible = true;
+
             if (equipment == null)
             {
                 return HttpNotFound();

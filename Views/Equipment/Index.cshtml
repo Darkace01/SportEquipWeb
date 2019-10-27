@@ -25,7 +25,20 @@
                             <p class="card-text">@Html.DisplayFor(modelItem => item.ShortDescription)</p>
                         </div>
                         <ul class="event-list-group list-group-flush">
-                            <li class="event-list-group-item" style="text-align:center">@Html.DisplayFor(modelItem => item.AvailableDate.Date)</li>
+                            <li class="event-list-group-item" style="text-align:center">
+                                @{
+                                    string available;
+                                    if (item.IsAvaible == false)
+                                    {
+                                        available = "Yes";
+                                    }
+                                    else
+                                    {
+                                        available = "No";
+                                    }
+                                }
+                                @available @Html.DisplayFor(modelItem => item.AvailableDate.Date)
+                            </li>
 
                         </ul>
                         @Html.ActionLink("Learn More", "Details", new { id = item.Id }, new { @class = "btn event-btn" })

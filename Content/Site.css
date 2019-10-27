@@ -22,7 +22,17 @@ select,
 textarea {
     max-width: 280px;
 }
-
+a :hover{
+    text-decoration:none;
+}
+a .decoration :hover {
+    text-decoration: none;
+    color: black;
+}
+a .decoration {
+    text-decoration: none;
+    color: black;
+}
 .event-btn {
     padding-top: 5px;
     padding-bottom: 5px;

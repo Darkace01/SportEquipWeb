@@ -3,6 +3,8 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Owin;
 using Owin;
 using SportEquipWeb.Models;
+using SportEquipWeb.Models.Core;
+using System.Collections.Generic;
 
 [assembly: OwinStartupAttribute(typeof(SportEquipWeb.Startup))]
 namespace SportEquipWeb
@@ -12,9 +14,10 @@ namespace SportEquipWeb
         public void Configuration(IAppBuilder app)
         {
             ConfigureAuth(app);
-            createRolesandUsers();
+            createRolesUsersCategory();
         }
-        private void createRolesandUsers()
+
+        private void createRolesUsersCategory()
         {
             ApplicationDbContext context = new ApplicationDbContext();
 
@@ -101,7 +104,14 @@ namespace SportEquipWeb
 
                 }
             }
-
+            var category = new List<Category>
+            {
+                new Category{Name="Field"},
+                new Category{Name="Track"}
+            };
+            category.ForEach(s => context.Category.Add(s));
+            context.SaveChanges();
         }
+
     }
 }

@@ -14,7 +14,7 @@ namespace SportEquipWeb.Models.Core
         public DateTime DateCreated { get; set; } = DateTime.Now;
         public DateTime DateModified { get; set; } = DateTime.Now;
         public string ApplicationUserId { get; set; }
-        [Required]
+        
         public virtual ApplicationUser Owner { get; set; }
         [Display(Name = "Short Description")]
         public string ShortDescription { get; set; }

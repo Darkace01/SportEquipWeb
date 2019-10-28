@@ -24,6 +24,8 @@ namespace SportEquipWeb.Models.Core
         public DateTime AvailableDate { get; set; }
         public int CategoryId { get; set; }
         public Category Category { get; set; }
+        [Range(0,double.MaxValue)]
+        public decimal DailyRate { get; set; }
 
         [Display(Name = "Image")]
         public string ImgPath { get; set; }

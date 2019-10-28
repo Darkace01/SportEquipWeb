@@ -3,13 +3,17 @@
 @{
     ViewBag.Title = "Index";
 }
-
+<style>
+    .disableBtn{
+        
+    }
+</style>
 
 <link href="~/Content/Site.css" rel="stylesheet" />
 <div class="container" style="padding-top:15px;">
     <div class="row">
         <div class="col-md-4">
-            @Html.ActionLink("Create New", "Create", null, htmlAttributes: new { @class = "btn btn-info" })
+            @Html.ActionLink("Create New", "Create","Owner", null, htmlAttributes: new { @class = "btn btn-info" })
         </div>
         <div class="col-md-8">
             @using (Html.BeginForm())
@@ -39,22 +43,32 @@
                         <ul class="event-list-group list-group-flush">
                             <li class="event-list-group-item" style="text-align:center">
                                 @{
-                                    string available;
+
                                     if (item.IsAvaible == false)
                                     {
-                                        available = "Yes"; <p>Available Date: @Html.DisplayFor(modelItem => item.AvailableDate.Date)</p>
+                                        <p>Available</p>
                                     }
                                     else
                                     {
-                                        available = "No";
+                                        <p>Not Available</p>
                                     }
                                 }
 
                             </li>
 
                         </ul>
+                        @{
+                            if (item.IsAvaible)
+                            {
+                                @Html.ActionLink("Order Now", "ComfirmOrder", "", new { id = item.Id }, htmlAttributes: new { @class = "btn event-btn disabled" })
+                            }
+                            else
+                            {
+                                @Html.ActionLink("Order Now", "ComfirmOrder", "", new { id = item.Id }, htmlAttributes: new { @class = "btn event-btn " })
+                            }
+                        }
                         @*@Html.ActionLink("Learn More", "Details", new { id = item.Id }, new { @class = "btn event-btn" })*@
-                        @Html.ActionLink("Order Now", "ComfirmOrder", new { id = item.Id }, htmlAttributes: new { @class = "btn event-btn" })
+
                     </div>
                 </a>
 

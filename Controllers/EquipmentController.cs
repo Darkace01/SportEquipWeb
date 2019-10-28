@@ -91,12 +91,12 @@ namespace SportEquipWeb.Controllers
             int res = equipment.AvailableDate.CompareTo(DateTime.Now);
             if (res > 0)
             {
-                equipment.IsAvaible = false;
+                ViewBag.Available = false;
             }else if(res == 0){
-                equipment.IsAvaible = false;
+                ViewBag.Available = false;
             }
             else
-                equipment.IsAvaible = true;
+                ViewBag.Available = true;
 
             if (equipment == null)
             {
@@ -227,7 +227,7 @@ namespace SportEquipWeb.Controllers
             return View(equipment);
         }
         [Authorize(Roles = "User")]
-        public ActionResult UserTransactions(int id = 0)
+        public ActionResult UserTransactions()
         {
             string userId = User.Identity.GetUserId();
             ApplicationUser applicationUser = db.Users.Find(userId);

@@ -45,7 +45,7 @@ namespace SportEquipWeb.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Owner")]
-        public ActionResult Create([Bind(Include = "Id,Name,ShortDescription,LongDescription,AvailableDate,ImgFile,ApplicationUserId,Owner,CategoryId,Category")] Equipment equipment)
+        public ActionResult Create([Bind(Include = "Id,Name,ShortDescription,LongDescription,AvailableDate,ImgFile,ApplicationUserId,Owner,CategoryId,Category,DailyRate")] Equipment equipment)
         {
             string userId = User.Identity.GetUserId();
             ApplicationUser applicationUser = db.Users.Find(userId);
@@ -94,7 +94,7 @@ namespace SportEquipWeb.Controllers
         }
 
         // GET: Owner/Edit/5
-        [Authorize(Roles = "Owner")]
+       
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -113,9 +113,10 @@ namespace SportEquipWeb.Controllers
                 Name=equipment.Name,
                 ShortDescription=equipment.ShortDescription,
                 LongDescription=equipment.LongDescription,
-                IsAvaible=equipment.IsAvaible,
+                //IsAvaible=equipment.IsAvaible,
                 ImgPath=equipment.ImgPath,
                 AvailableDate=equipment.AvailableDate,
+                DailyRate=equipment.DailyRate,
             };
 
             return View(eq);
@@ -125,9 +126,8 @@ namespace SportEquipWeb.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Owner")]
-        public ActionResult Edit([Bind(Include = "Id,Name,ShortDescription,LongDescription,AvailableDate,ImgFile")] Equipment eqViewModel)
+        [ValidateAntiForgeryToken]       
+        public ActionResult Edit([Bind(Include = "Id,Name,ShortDescription,LongDescription,AvailableDate,ImgFile,DailyRate")] Equipment eqViewModel)
         {
 
             if (ModelState.IsValid)
@@ -149,7 +149,7 @@ namespace SportEquipWeb.Controllers
                 equipment.LongDescription = eqViewModel.LongDescription;
                 equipment.AvailableDate = eqViewModel.AvailableDate;
                 equipment.IsAvaible = eqViewModel.IsAvaible;
-
+                equipment.DailyRate = eqViewModel.DailyRate;
 
 
                 db.Entry(equipment).State = EntityState.Modified;
@@ -157,6 +157,17 @@ namespace SportEquipWeb.Controllers
                 return RedirectToAction("Index");
             }
             return View(eqViewModel);
+        }
+
+        public ActionResult Transactions()
+        {
+            string userId = User.Identity.GetUserId();
+            ApplicationUser applicationUser = db.Users.Find(userId);
+
+            var transaction = (from s in db.Transactions
+                               select s);
+            var userTransaction = transaction.Where(t => t.Equipment.Owner.Id == userId).Include(e => e.Equipment).ToList();
+            return View(userTransaction);
         }
 
     }

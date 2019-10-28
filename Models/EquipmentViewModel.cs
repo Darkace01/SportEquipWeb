@@ -18,6 +18,9 @@ namespace SportEquipWeb.Models
         public string LongDescription { get; set; }
         public bool IsAvaible { get; set; }
         public DateTime AvailableDate { get; set; }
+        [Range(0, double.MaxValue)]
+        public decimal DailyRate { get; set; }
+
 
         [Display(Name = "Image")]
         public string ImgPath { get; set; }

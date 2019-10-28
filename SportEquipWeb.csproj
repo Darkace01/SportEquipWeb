@@ -266,6 +266,7 @@
     <Content Include="Views\Equipment\UserDetails.cshtml" />
     <Content Include="Views\Equipment\EquipmentList.cshtml" />
     <Content Include="Views\Owner\Index.cshtml" />
+    <Content Include="Views\Owner\Transactions.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

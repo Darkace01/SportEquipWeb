@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using SportEquipWeb.Models;
@@ -70,6 +71,13 @@ namespace SportEquipWeb.Controllers
         {
             if (!ModelState.IsValid)
             {
+                return View(model);
+            }
+
+            var user = UserManager.FindByEmailAsync(model.Email).Result;
+            if (!user.IsEnabled)
+            {
+                ModelState.AddModelError("", "User has been blocked. contact admin to unlock");
                 return View(model);
             }
 
@@ -147,14 +155,41 @@ namespace SportEquipWeb.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Register(RegisterViewModel model)
+        public async Task<ActionResult> Register(RegisterViewModel model,string role)
         {
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
                 var result = await UserManager.CreateAsync(user, model.Password);
+                ApplicationDbContext context = new ApplicationDbContext();
                 if (result.Succeeded)
                 {
+                    //owner sign up
+                    if (String.Compare(role, "owner") == 0)
+                    {
+                        var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
+                        
+                        if (!roleManager.RoleExists("owner"))
+                        {
+                            var userRole = new Microsoft.AspNet.Identity.EntityFramework.IdentityRole();
+                            userRole.Name = "owner";
+                            roleManager.Create(userRole);
+                        }
+                        UserManager.AddToRole(user.Id, "owner");
+                    }
+                    else if (String.Compare(role, "user") == 0)
+                    {
+                        var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
+
+                        if (!roleManager.RoleExists("user"))
+                        {
+                            var userRole = new Microsoft.AspNet.Identity.EntityFramework.IdentityRole();
+                            userRole.Name = "user";
+                            roleManager.Create(userRole);
+                        }
+                        UserManager.AddToRole(user.Id, "user");
+                    }
+
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
                     
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
@@ -403,6 +438,8 @@ namespace SportEquipWeb.Controllers
             return View();
         }
 
+
+       
         protected override void Dispose(bool disposing)
         {
             if (disposing)

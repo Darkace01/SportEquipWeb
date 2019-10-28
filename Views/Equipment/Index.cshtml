@@ -42,18 +42,19 @@
                                     string available;
                                     if (item.IsAvaible == false)
                                     {
-                                        available = "Yes";
+                                        available = "Yes"; <p>Available Date: @Html.DisplayFor(modelItem => item.AvailableDate.Date)</p>
                                     }
                                     else
                                     {
                                         available = "No";
                                     }
                                 }
-                                @available @Html.DisplayFor(modelItem => item.AvailableDate.Date)
+
                             </li>
 
                         </ul>
-                        @Html.ActionLink("Learn More", "Details", new { id = item.Id }, new { @class = "btn event-btn" })
+                        @*@Html.ActionLink("Learn More", "Details", new { id = item.Id }, new { @class = "btn event-btn" })*@
+                        @Html.ActionLink("Order Now", "ComfirmOrder", new { id = item.Id }, htmlAttributes: new { @class = "btn event-btn" })
                     </div>
                 </a>
 

@@ -2,30 +2,87 @@
     ViewBag.Title = "Home Page";
 }
 
-<div class="jumbotron">
-    <h1>ASP.NET</h1>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-    <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
-</div>
+@using Microsoft.AspNet.Identity
+<div class="container">
+    @if (Request.IsAuthenticated)
+    {
+        if (User.IsInRole("Admin"))
+        {
+    <div class="row">
+        <div class="col-md-4">
+            <div class="jumbotron">
+                <h2>View All Equipment</h2>
+                <p>Some quick example to View All Equipment</p>
+                <p><a class="btn btn-primary btn-md" href="@Url.Content("~/Equipment/Index")" role="button">View All</a></p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="jumbotron">
+                <h2>View All Transactions</h2>
+                <p>Some quick example to View All Equipment</p>
+                <p><a class="btn btn-primary btn-md" href="@Url.Content("~/Equipment/AllTransactions")" role="button">View All</a></p>
+            </div>
+        </div>
+    </div>
+        }
+        else if (User.IsInRole("User"))
+        {
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="jumbotron">
+                        <h2>View All Equipment</h2>
+                        <p>Some quick example to View All Equipment</p>
+                        <p><a class="btn btn-primary btn-md" href="@Url.Content("~/Equipment/Index")" role="button">View All</a></p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="jumbotron">
+                        <h2>View All Transactions</h2>
+                        <p>Some quick example to View All Equipment</p>
+                        <p><a class="btn btn-primary btn-md" href="@Url.Content("~/Equipment/UserTransactions")" role="button">View All</a></p>
+                    </div>
+                </div>
+            </div>
+        }
+        else if (User.IsInRole("Owner"))
+        {
+            <div class="row">
+                <div class="col-md-4">
 
-<div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>
-            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-            enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
-        </p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
-    </div>
+                    <div class="jumbotron">
+                        <h2>Add An Equipment</h2>
+                        <p>Some quick example to Add an Equipment</p>
+                        <p><a class="btn btn-primary btn-md" href="@Url.Content("~/Equipment/Create")" role="button">Create</a></p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="jumbotron">
+                        <h2>View All Equipment</h2>
+                        <p>Some quick example to View All Equipment</p>
+                        <p><a class="btn btn-primary btn-md" href="@Url.Content("~/Equipment/Index")" role="button">View All</a></p>
+                    </div>
+
+
+                </div>
+            </div>
+        }
+
+    }
+    else
+    {
+
+        <div class="container" style="padding-top:50px">
+            <div class="row">
+                <div class="col-md-6 " style="padding:0 10%">
+                    <h1>Welcome to SportEquipWeb</h1>
+                    <br />
+                    <h3>Manage all results and units.</h3>
+                    <p>please <a href="@Url.Content("~/Account/login")" class="btn btn-info">login</a> to use </p>
+                </div>
+                <div class="col-md-6">
+                    <img src="https://miro.medium.com/max/3200/0*z43TuPXCcl_-RizQ.jpg" alt="manager pic" style="width:45vw;" />
+                </div>
+            </div>
+        </div>
+    }
 </div>

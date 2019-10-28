@@ -1,0 +1,50 @@
+﻿@model SportEquipWeb.Models.ApplicationUser
+
+@{
+    ViewBag.Title = "LockUser";
+}
+
+<h2>LockUser</h2>
+
+<div>
+    <h4>ApplicationUser</h4>
+    <hr />
+    <h4 style="color:red">Are you sure you want to lock user ??</h4>
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.UserName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UserName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PhoneNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PhoneNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LockoutEnabled)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LockoutEnabled)
+        </dd>
+
+
+
+    </dl>
+</div>
+@Html.ActionLink("Confirm Lock", "LockOutConfirmed", new { id = Model.Id })

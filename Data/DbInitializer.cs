@@ -39,6 +39,7 @@ namespace SportEquipWeb.Data
                 var user = new ApplicationUser();
                 user.UserName = "admin@gmail.com";
                 user.Email = "admin@gmail.com";
+                user.IsEnabled = true;
 
                 string userPWD = "abc123";
 
@@ -68,6 +69,9 @@ namespace SportEquipWeb.Data
                 user.UserName = "owner@gmail.com";
                 user.Email = "owner@gmail.com";
 
+                user.IsEnabled = true;
+
+
                 string userPWD = "abc123";
 
                 var chkUser = UserManager.Create(user, userPWD);
@@ -92,6 +96,8 @@ namespace SportEquipWeb.Data
                 var user = new ApplicationUser();
                 user.UserName = "user@gmail.com";
                 user.Email = "user@gmail.com";
+
+                user.IsEnabled = true;
 
                 string userPWD = "abc123";
 

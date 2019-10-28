@@ -1,0 +1,45 @@
+﻿@model IEnumerable<SportEquipWeb.Models.Core.Transaction>
+
+@{
+    ViewBag.Title = "UserTransactions";
+}
+
+<h2>UserTransactions</h2>
+
+
+<table class="table">
+    <tr>
+
+        <th>
+            @Html.Label("Equipment Name")
+        </th>
+        <th>
+            @Html.Label("Equipment Owner")
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Equipment.ShortDescription)
+        </th>
+        <th>
+            @Html.Label("Date Order")
+        </th>
+    </tr>
+
+@foreach (var item in Model) {
+<tr>
+
+    <td>
+        @Html.DisplayFor(modelItem => item.Equipment.Name)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Equipment.Owner.UserName)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Equipment.ShortDescription)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.DateCreated)
+    </td>
+</tr>
+}
+
+</table>

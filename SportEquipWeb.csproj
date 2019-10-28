@@ -168,9 +168,12 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\EquipmentController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\OwnerController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Data\DbInitializer.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -178,6 +181,7 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Core\Category.cs" />
     <Compile Include="Models\Core\Equipment.cs" />
+    <Compile Include="Models\Core\Transaction.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -244,9 +248,19 @@
     <Content Include="Views\Equipment\Details.cshtml" />
     <Content Include="Views\Equipment\Edit.cshtml" />
     <Content Include="Views\Equipment\Index.cshtml" />
+    <Content Include="Views\Equipment\ComfirmOrder.cshtml" />
+    <Content Include="Views\Equipment\UserTransactions.cshtml" />
+    <Content Include="Views\Equipment\AllTransactions.cshtml" />
+    <Content Include="Views\Equipment\AllUsers.cshtml" />
+    <Content Include="Views\Equipment\LockUser.cshtml" />
+    <Content Include="Views\Equipment\UserDetails.cshtml" />
+    <Content Include="Views\Equipment\EquipmentList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Admin\" />
+    <Folder Include="Views\Owner\" />
+    <Folder Include="Views\User\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

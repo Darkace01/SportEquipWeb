@@ -1,4 +1,5 @@
-﻿using System.Data.Entity;
+﻿using System.Collections.Generic;
+using System.Data.Entity;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
@@ -16,8 +17,13 @@ namespace SportEquipWeb.Models
             // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
             var userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);
             // Add custom user claims here
+            
+    
             return userIdentity;
         }
+        public IEnumerable<Transaction> Transactions { get; set; }
+        public bool IsEnabled { get; set; }
+
     }
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
@@ -30,10 +36,17 @@ namespace SportEquipWeb.Models
 
         public DbSet<Equipment> Equipment { get; set; }
         public DbSet<Category> Category { get; set; }
+        public DbSet<Transaction> Transactions { get; set; }
 
         public static ApplicationDbContext Create()
         {
             return new ApplicationDbContext();
         }
+
+        //public System.Data.Entity.DbSet<SportEquipWeb.Models.ApplicationUser> ApplicationUsers { get; set; }
+
+        //public System.Data.Entity.DbSet<SportEquipWeb.Models.ApplicationUser> ApplicationUsers { get; set; }
+
+        //public System.Data.Entity.DbSet<SportEquipWeb.Models.ApplicationUser> ApplicationUsers { get; set; }
     }
 }

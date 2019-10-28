@@ -8,6 +8,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
 using SportEquipWeb.Models;
 using SportEquipWeb.Models.Core;
 
@@ -17,12 +18,34 @@ namespace SportEquipWeb.Controllers
     public class EquipmentController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
+        private ApplicationUserManager _userManager;
+        public EquipmentController(ApplicationUserManager userManager)
+        {
 
+            UserManager = userManager;
+        }
+        public EquipmentController()
+        {
+
+        }
+        public ApplicationUserManager UserManager
+        {
+            get
+            {
+                return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
+            }
+            private set
+            {
+                _userManager = value;
+            }
+        }
         // GET: Equipment
         //[Authorize(Roles = "Owner,Admin,User")]
         public ActionResult Index(string searchString)
         {
-            var equipment = db.Equipment.ToList();
+            
+            var equipment = (from s in db.Equipment
+                             select s);
             if (!String.IsNullOrEmpty(searchString))
             {
                 try
@@ -30,7 +53,7 @@ namespace SportEquipWeb.Controllers
                     equipment = equipment.Where(s => s.Name.ToLower().Contains(searchString.ToLower())
                                                  || s.Owner.UserName.ToLower().Contains(searchString.ToLower())
                                                  || s.Category.Name.ToLower().Contains(searchString.ToLower())
-                                                 ).ToList();
+                                                 );
                 }
                 catch (Exception ex)
                 {
@@ -38,7 +61,7 @@ namespace SportEquipWeb.Controllers
                     throw;
                 }
             }
-            foreach (var item in equipment)
+            foreach (var item in equipment.ToList())
             {
                 int res = item.AvailableDate.CompareTo(DateTime.Now);
                 if (res > 0)
@@ -52,7 +75,7 @@ namespace SportEquipWeb.Controllers
                 else
                     item.IsAvaible = true;
             }
-            return View(equipment);
+           return View(equipment.ToList());
         }
 
         // GET: Equipment/Details/5
@@ -139,7 +162,7 @@ namespace SportEquipWeb.Controllers
         }
 
         // GET: Equipment/Edit/5
-        [Authorize(Roles = "User,Admin")]
+        [Authorize(Roles = "Owner")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -159,7 +182,7 @@ namespace SportEquipWeb.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "User,Admin")]
+        [Authorize(Roles = "Owner")]
         public ActionResult Edit([Bind(Include = "Id,Name,ShortDescription,LongDescription,AvailableDate,ImgPath")] Equipment equipment)
         {
             if (ModelState.IsValid)
@@ -172,7 +195,7 @@ namespace SportEquipWeb.Controllers
         }
 
         // GET: Equipment/Delete/5
-        [Authorize(Roles = "User,Admin")]
+        [Authorize(Roles = "Owner,Admin")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -190,13 +213,193 @@ namespace SportEquipWeb.Controllers
         // POST: Equipment/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "User,Admin")]
+        [Authorize(Roles = "Owner,Admin")]
         public ActionResult DeleteConfirmed(int id)
         {
             Equipment equipment = db.Equipment.Find(id);
             db.Equipment.Remove(equipment);
             db.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        [Authorize(Roles = "User")]
+        public ActionResult OrderNow(int id = 0)
+        {
+            if (id == 0)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Equipment equipment = db.Equipment.Find(id);
+            if (equipment == null)
+            {
+                return HttpNotFound();
+            }
+
+            string userId = User.Identity.GetUserId();
+            ApplicationUser applicationUser = db.Users.Find(userId);
+
+
+            Transaction transaction = new Transaction()
+            {
+                Equipment = equipment,
+                User = applicationUser,
+                DateCreated = DateTime.Now,
+            };
+            db.Transactions.Add(transaction);
+            db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+        //[HttpGet]
+        [Authorize(Roles = "User")]
+        public ActionResult ComfirmOrder(int ? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Equipment equipment = db.Equipment.Find(id);
+            if(equipment == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            int res = equipment.AvailableDate.CompareTo(DateTime.Now);
+            if (res > 0)
+            {
+                equipment.IsAvaible = false;
+            }
+            else if (res == 0)
+            {
+                equipment.IsAvaible = false;
+            }
+            else
+                equipment.IsAvaible = true;
+
+            if (equipment == null)
+            {
+                return HttpNotFound();
+            }
+            return View(equipment);
+        }
+        [Authorize(Roles = "User")]
+        public ActionResult UserTransactions(int id = 0)
+        {
+            string userId = User.Identity.GetUserId();
+            ApplicationUser applicationUser = db.Users.Find(userId);
+
+            var transaction = (from s in db.Transactions
+                             select s);
+            var userTransaction = transaction.Where(t => t.User.Id == userId).Include(e => e.Equipment).ToList();
+            return View(userTransaction);
+        }
+
+        [Authorize(Roles ="Admin")]
+        public ActionResult AllTransactions()
+        {
+            var transaction = (from s in db.Transactions
+                               select s);
+            var allTransaction = transaction.Include(e => e.Equipment).Include(u => u.User).ToList();
+            return View(allTransaction);
+        }
+
+        [Authorize(Roles = "Admin")]
+        public ActionResult AllUsers()
+        {
+            var allUsers = (from s in db.Users
+                            select s).Where(u=>u.UserName!="admin@gmail.com").ToList();
+
+            
+            return View(allUsers.ToList());
+        }
+
+        public ActionResult UnlockUser(string id)
+        {
+            if (String.IsNullOrEmpty(id))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            ApplicationUser applicationUser = db.Users.Find(id);
+            if (applicationUser == null)
+            {
+                return HttpNotFound();
+            }
+
+            applicationUser.IsEnabled = true;
+            db.Entry(applicationUser).State = EntityState.Modified;
+            db.SaveChanges();
+            return RedirectToAction("AllUsers");
+        }
+        public ActionResult LockUser(string id)
+        {
+
+            if (String.IsNullOrEmpty(id))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            ApplicationUser applicationUser = db.Users.Find(id);
+
+            if (applicationUser == null)
+            {
+                return HttpNotFound();
+            }
+            return View(applicationUser);
+        }
+
+
+        public ActionResult UserDetails(string id)
+        {
+
+            if (String.IsNullOrEmpty(id))
+            {
+
+            }
+            
+            ApplicationUser applicationUser = db.Users.Find(id);
+
+            if (applicationUser == null)
+            {
+
+            }
+
+            if (UserManager.IsLockedOut(id))
+            {
+                ViewBag.Locked = true;
+            }
+            else
+            {
+                ViewBag.Locked = false;
+            }
+            return View(applicationUser);
+        }
+
+        [Authorize(Roles ="Admin")]
+        public ActionResult EquipmentList()
+        {
+            var equipment = (from s in db.Equipment
+                             select s);
+            return View(equipment.ToList());
+        }
+     
+        [Authorize(Roles = "Admin")]
+        public ActionResult LockOutConfirmed(string id)
+        {
+            if (String.IsNullOrEmpty(id))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+          
+            ApplicationUser applicationUser = db.Users.Find(id);
+            if (applicationUser == null)
+            {
+                return HttpNotFound();
+            }
+
+            applicationUser.IsEnabled = false;
+            db.Entry(applicationUser).State = EntityState.Modified;
+            db.SaveChanges();
+            return RedirectToAction("AllUsers");
+            
         }
 
         protected override void Dispose(bool disposing)

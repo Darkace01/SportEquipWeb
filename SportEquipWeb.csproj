@@ -182,6 +182,7 @@
     <Compile Include="Models\Core\Category.cs" />
     <Compile Include="Models\Core\Equipment.cs" />
     <Compile Include="Models\Core\Transaction.cs" />
+    <Compile Include="Models\EquipmentViewModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -192,6 +193,15 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\IMAGES\ArraySum120190627010602368.png" />
+    <Content Include="Content\IMAGES\ArraySum120193627013605111.png" />
+    <Content Include="Content\IMAGES\ArraySum120193627073616516.png" />
+    <Content Include="Content\IMAGES\ArraySum220190127010148838.png" />
+    <Content Include="Content\IMAGES\code20192228052218460.PNG" />
+    <Content Include="Content\IMAGES\dont20192228052249680.png" />
+    <Content Include="Content\IMAGES\event-120193728093734357.jpg" />
+    <Content Include="Content\IMAGES\logo20192528062551473.png" />
+    <Content Include="Content\IMAGES\WIN_20180909_16_14_36_Pro20192928062952161.jpg" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -246,7 +256,7 @@
     <Content Include="Views\Owner\Create.cshtml" />
     <Content Include="Views\Equipment\Delete.cshtml" />
     <Content Include="Views\Equipment\Details.cshtml" />
-    <Content Include="Views\Equipment\Edit.cshtml" />
+    <Content Include="Views\Owner\Edit.cshtml" />
     <Content Include="Views\Equipment\Index.cshtml" />
     <Content Include="Views\Equipment\ComfirmOrder.cshtml" />
     <Content Include="Views\Equipment\UserTransactions.cshtml" />
@@ -255,6 +265,7 @@
     <Content Include="Views\Equipment\LockUser.cshtml" />
     <Content Include="Views\Equipment\UserDetails.cshtml" />
     <Content Include="Views\Equipment\EquipmentList.cshtml" />
+    <Content Include="Views\Owner\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

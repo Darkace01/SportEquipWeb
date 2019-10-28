@@ -1,0 +1,160 @@
+﻿@model SportEquipWeb.Models.EquipmentViewModel
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit</h2>
+
+<script src="https://unpkg.com/jquery@3.3.1/dist/jquery.js"></script>
+
+@using (Html.BeginForm("Edit", "Owner", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    <h4>Equipment</h4>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.Id)
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.ShortDescription, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.ShortDescription, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.ShortDescription, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.LongDescription, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.LongDescription, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.LongDescription, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.AvailableDate, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.AvailableDate, new { htmlAttributes = new { @class = "form-control" } })
+
+            @Html.ValidationMessageFor(model => model.AvailableDate, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.IsAvaible, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.IsAvaible, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.IsAvaible, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        @Html.Label("Image Preview", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            <img class="img-responsive" id="targetImg" style="height:250px;width:250px;margin-bottom:10px" src="@Url.Content(Model.ImgPath)" />
+        </div>
+
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.ImgFile, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            <p id="ImgError" class="" style="color:red;">@ViewBag.ImgError</p>
+            <p id="imgFileSizeError" style="color:red;"></p>
+            <input type="file" id="imgFile" name="ImgFile" accept="image/*" value="Choose Image" />
+
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Save" class="btn btn-default" />
+        </div>
+    </div>
+</div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+
+<script>
+
+    var imgFileSizeError = document.getElementById("imgFileSizeError");
+    var imgFile = document.getElementById("imgFile");
+    var submitButton = document.getElementById("submitButton");
+    var ImgError = document.getElementById("ImgError");
+
+
+    $(document).ready(function () {
+        $("#imgFile").change(function () {
+            var File = this.files;
+            if (File && File[0]) {
+                ReadImage(File[0]);
+            }
+        })
+    })
+
+
+    var ReadImage = function (file) {
+        var reader = new FileReader;
+        var image = new Image;
+
+        reader.readAsDataURL(file);
+        reader.onload = function (_file) {
+            image.src = _file.target.result;
+            image.onload = function () {
+                var height = this.height;
+                var width = this.width;
+                var type = file.type;
+                var size = ~~(file.size / 1024) + "KB";
+                $("#targetImg").attr('src', _file.target.result);
+                $("#imgPreview").show();
+            }
+        }
+    }
+
+
+
+
+
+    submitButton.addEventListener("click", function () {
+
+        if (imgFile.files[0].size > (4 * 1000 * 1024)) {
+            //pdfFileSizeError.textContent = "File too large";
+            event.returnValue = false;
+        }
+
+    })
+
+
+    $(document).ready(function () {
+        $('#imgFile').bind('change', function () {
+            ImgError.textContent = "";
+            // check if the file is larger than 4mb
+            if (this.files[0].size > (4 * 1000 * 1024)) {
+                imgFileSizeError.textContent = "File too large";
+            }
+            else {
+                // passed.
+                imgFileSizeError.textContent = "";
+            }
+        });
+    })
+
+</script>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

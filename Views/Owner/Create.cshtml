@@ -5,9 +5,12 @@
 }
 
 <h2>Create</h2>
+<script src="https://unpkg.com/jquery@3.3.1/dist/jquery.js"></script>
+<style>
+    
+</style>
 
-
-@using (Html.BeginForm("Create", "Equipment", FormMethod.Post, new { enctype = "multipart/form-data" }))
+@using (Html.BeginForm("Create", "Owner", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
 
@@ -43,7 +46,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.LongDescription, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.TextAreaFor(model => model.LongDescription, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.LongDescription, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.LongDescription, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -51,26 +54,31 @@
         <div class="form-group">
             @Html.LabelFor(model => model.AvailableDate, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                <input type="datetime-local" class="form-control" name="AvailableDate" />
+                <input type="date" class="form-control" name="AvailableDate" />
                 @*@Html.(model => model.AvailableDate, new { htmlAttributes = new { @class = "form-control" } })*@
                 @Html.ValidationMessageFor(model => model.AvailableDate, "", new { @class = "text-danger" })
             </div>
         </div>
+        <div class="form-group">
+            @Html.Label("Image Preview", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <img class="img-responsive" id="targetImg" style="height:250px;width:250px;margin-bottom:10px" src="@Url.Content("~/Content/IMAGES/dummyProfilePic.jpg")" />
+            </div>
 
+        </div>
         <div class="form-group">
             @Html.LabelFor(model => model.ImgFile, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 <p id="ImgError" class="" style="color:red;">@ViewBag.ImgError</p>
                 <p id="imgFileSizeError" style="color:red;"></p>
                 <input type="file" id="imgFile" name="ImgFile" accept="image/*" value="Choose Image" required />
-                @*@Html.EditorFor(model => model.ImgPath, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.ImgPath, "", new { @class = "text-danger" })*@
+
             </div>
         </div>
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <input type="submit" value="Create" class="btn btn-default" id="submitButton"/>
             </div>
         </div>
     </div>

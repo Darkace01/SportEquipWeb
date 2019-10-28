@@ -243,7 +243,7 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <Content Include="Views\Equipment\Create.cshtml" />
+    <Content Include="Views\Owner\Create.cshtml" />
     <Content Include="Views\Equipment\Delete.cshtml" />
     <Content Include="Views\Equipment\Details.cshtml" />
     <Content Include="Views\Equipment\Edit.cshtml" />
@@ -259,7 +259,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\Admin\" />
-    <Folder Include="Views\Owner\" />
     <Folder Include="Views\User\" />
   </ItemGroup>
   <ItemGroup>

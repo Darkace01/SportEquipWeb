@@ -65,8 +65,8 @@ namespace SportEquipWeb.Controllers
             }
             catch (Exception)
             {
-
-                //throw;
+                ViewBag.Error = "Delete Failed. Try again. If problem persists, contact administrator";
+                return RedirectToAction("Delete", id);
             }
 
             return RedirectToAction("EquipmentList");
@@ -95,9 +95,18 @@ namespace SportEquipWeb.Controllers
                 return HttpNotFound();
             }
 
-            applicationUser.IsEnabled = true;
-            db.Entry(applicationUser).State = EntityState.Modified;
-            db.SaveChanges();
+            try
+            {
+                applicationUser.IsEnabled = true;
+                db.Entry(applicationUser).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+            catch (Exception)
+            {
+
+                ViewBag.Error = "Unlock user failed. Try again. If problem persists, contact administrator";
+                return RedirectToAction("AllUsers");
+            }
             return RedirectToAction("AllUsers");
         }
         public ActionResult LockUser(string id)
@@ -129,9 +138,17 @@ namespace SportEquipWeb.Controllers
                 return HttpNotFound();
             }
 
-            applicationUser.IsEnabled = false;
-            db.Entry(applicationUser).State = EntityState.Modified;
-            db.SaveChanges();
+            try
+            {
+                applicationUser.IsEnabled = false;
+                db.Entry(applicationUser).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+            catch (Exception)
+            {
+                ViewBag.Error = "Lock failed. Try again. If problem persists, contact administrator";
+                return RedirectToAction("LockUser", id);
+            }
             return RedirectToAction("AllUsers");
 
         }

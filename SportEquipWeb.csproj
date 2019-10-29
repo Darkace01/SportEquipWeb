@@ -259,9 +259,9 @@
     <Content Include="Views\Equipment\Index.cshtml" />
     <Content Include="Views\Equipment\ComfirmOrder.cshtml" />
     <Content Include="Views\Equipment\UserTransactions.cshtml" />
-    <Content Include="Views\Equipment\AllTransactions.cshtml" />
-    <Content Include="Views\Equipment\AllUsers.cshtml" />
-    <Content Include="Views\Equipment\LockUser.cshtml" />
+    <Content Include="Views\Admin\AllTransactions.cshtml" />
+    <Content Include="Views\Admin\AllUsers.cshtml" />
+    <Content Include="Views\Admin\LockUser.cshtml" />
     <Content Include="Views\Equipment\UserDetails.cshtml" />
     <Content Include="Views\Admin\EquipmentList.cshtml" />
     <Content Include="Views\Owner\Index.cshtml" />

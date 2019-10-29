@@ -52,7 +52,7 @@ namespace SportEquipWeb.Controllers
                 {
                     equipment = equipment.Where(s => s.Name.ToLower().Contains(searchString.ToLower())
                                                  || s.Owner.UserName.ToLower().Contains(searchString.ToLower())
-                                                 || s.Category.Name.ToLower().Contains(searchString.ToLower())
+                                                 || s.Category.ToLower().Contains(searchString.ToLower())
                                                  );
                 }
                 catch (Exception ex)

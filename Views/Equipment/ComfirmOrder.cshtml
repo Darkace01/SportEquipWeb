@@ -4,7 +4,7 @@
 }
 
 <div>
-    <h4>Equipment</h4>
+    <h1>Do you want to Order this Equipment</h1>
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -43,7 +43,7 @@
         <dd>
             @{
                 string available;
-                if (Model.IsAvaible == false)
+                if (Model.IsAvaible == true)
                 {
                     available = "Yes";
                 }
@@ -60,7 +60,7 @@
         </dt>
 
         <dd>
-            <img class="img-responsive" src="@Url.Content(Model.ImgPath)">
+            <img class="img-responsive" src="@Url.Content(Model.ImgPath)" style="width:300px; height:300px;">
         </dd>
 
     </dl>

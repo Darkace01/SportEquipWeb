@@ -132,6 +132,11 @@ namespace SportEquipWeb.Controllers
         {
             if (ModelState.IsValid)
             {
+                string path = Request.MapPath(equipment.ImgPath);
+                if (System.IO.File.Exists(path))
+                {
+                    System.IO.File.Delete(path);
+                }
                 db.Entry(equipment).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -162,6 +167,12 @@ namespace SportEquipWeb.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Equipment equipment = db.Equipment.Find(id);
+            string path = Request.MapPath(equipment.ImgPath);
+            if (System.IO.File.Exists(path))
+            {
+                System.IO.File.Delete(path);
+            }
+            
             db.Equipment.Remove(equipment);
             db.SaveChanges();
             return RedirectToAction("Index");

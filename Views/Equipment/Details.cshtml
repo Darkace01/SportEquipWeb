@@ -61,7 +61,7 @@
         </dt>
 
         <dd>
-            <img class="img-responsive" src="@Url.Content(Model.ImgPath)">
+            <img class="img-responsive" src="@Url.Content(Model.ImgPath)" style="width:300px; height:300px;">
         </dd>
 
     </dl>
@@ -76,6 +76,5 @@
 
 
     @Html.ActionLink("Delete", "Delete", new { id = Model.Id }, htmlAttributes: new { @class = "" }) |
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
     @Html.ActionLink("Back to List", "Index")
 </p>

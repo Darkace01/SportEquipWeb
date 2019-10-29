@@ -20,7 +20,7 @@
             {
 
                 @Html.TextBox("SearchString", null, htmlAttributes: new { @class = "form-control" })
-                <input type="submit" value="Filter" class="btn btn-success" />
+                <input type="submit" value="Search" class="btn btn-success" />
 
             }
         </div>
@@ -44,7 +44,7 @@
                             <li class="event-list-group-item" style="text-align:center">
                                 @{
 
-                                    if (item.IsAvaible == false)
+                                    if (item.IsAvaible == true)
                                     {
                                         <p>Available</p>
                                     }
@@ -60,11 +60,11 @@
                         @{
                             if (item.IsAvaible)
                             {
-                                @Html.ActionLink("Order Now", "ComfirmOrder", "", new { id = item.Id }, htmlAttributes: new { @class = "btn event-btn disabled" })
+                                @Html.ActionLink("Order Now", "ComfirmOrder", "Equipment", new { id = item.Id }, htmlAttributes: new { @class = "btn event-btn " })
                             }
                             else
                             {
-                                @Html.ActionLink("Order Now", "ComfirmOrder", "", new { id = item.Id }, htmlAttributes: new { @class = "btn event-btn " })
+                                @Html.ActionLink("Order Now", "ComfirmOrder", "Equipment", new { id = item.Id }, htmlAttributes: new { @class = "btn event-btn disabled" })
                             }
                         }
                         @*@Html.ActionLink("Learn More", "Details", new { id = item.Id }, new { @class = "btn event-btn" })*@

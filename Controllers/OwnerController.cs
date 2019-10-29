@@ -166,7 +166,7 @@ namespace SportEquipWeb.Controllers
 
             var transaction = (from s in db.Transactions
                                select s);
-            var userTransaction = transaction.Where(t => t.Equipment.Owner.Id == userId).Include(e => e.Equipment).ToList();
+            var userTransaction = transaction.Where(t => t.Equipment.Owner.Id == userId).Include(e => e.Equipment).Include(u => u.User).ToList();
             return View(userTransaction);
         }
 

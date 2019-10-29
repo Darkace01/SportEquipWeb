@@ -129,6 +129,7 @@ namespace SportEquipWeb.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.Error = TempData["DeleteEquipError"];
             return View(equipment);
         }
 
@@ -138,15 +139,26 @@ namespace SportEquipWeb.Controllers
         [Authorize(Roles = "Owner,Admin")]
         public ActionResult DeleteConfirmed(int id)
         {
-            Equipment equipment = db.Equipment.Find(id);
-            string path = Request.MapPath(equipment.ImgPath);
+            string imgPath = "";
+            try
+            {
+                Equipment equipment = db.Equipment.Find(id);
+                imgPath = equipment.ImgPath;
+                equipment.IsDeleted = true;
+                db.Entry(equipment).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+            catch (Exception)
+            {
+                TempData["DeleteEquipError"] = "Error occured while deleteing equipment. Try again. If error persists, contact administrator";
+                return RedirectToAction("Delete", id);
+            }
+
+            string path = Request.MapPath(imgPath);
             if (System.IO.File.Exists(path))
             {
                 System.IO.File.Delete(path);
             }
-            equipment.IsDeleted = true;
-            db.Entry(equipment).State = EntityState.Modified;
-            db.SaveChanges();
             return RedirectToAction("Index");
         }
 
@@ -157,24 +169,32 @@ namespace SportEquipWeb.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Equipment equipment = db.Equipment.Find(id);
-            if (equipment == null || equipment.IsDeleted==true)
+            try
             {
-                return HttpNotFound();
+                Equipment equipment = db.Equipment.Find(id);
+                if (equipment == null || equipment.IsDeleted == true)
+                {
+                    return HttpNotFound();
+                }
+
+                string userId = User.Identity.GetUserId();
+                ApplicationUser applicationUser = db.Users.Find(userId);
+
+
+                Transaction transaction = new Transaction()
+                {
+                    Equipment = equipment,
+                    User = applicationUser,
+                    DateCreated = DateTime.Now,
+                };
+                db.Transactions.Add(transaction);
+                db.SaveChanges();
             }
-
-            string userId = User.Identity.GetUserId();
-            ApplicationUser applicationUser = db.Users.Find(userId);
-
-
-            Transaction transaction = new Transaction()
+            catch (Exception)
             {
-                Equipment = equipment,
-                User = applicationUser,
-                DateCreated = DateTime.Now,
-            };
-            db.Transactions.Add(transaction);
-            db.SaveChanges();
+                TempData["OrderError"] = "Failed to Order. Try again";
+                return RedirectToAction("ConfirmOrder", id);
+            }
             return RedirectToAction("OrderComfirmation");
         }
 
@@ -207,6 +227,7 @@ namespace SportEquipWeb.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.Error = TempData["OrderError"];
             return View(equipment);
         }
         [Authorize(Roles = "User")]

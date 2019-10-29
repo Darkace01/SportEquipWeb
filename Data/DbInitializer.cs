@@ -110,12 +110,12 @@ namespace SportEquipWeb.Data
 
                 }
             }
-            var category = new List<Category>
-            {
-                new Category{Name="Field"},
-                new Category{Name="Track"}
-            };
-            category.ForEach(s => context.Category.Add(s));
+            //var category = new List<Category>
+            //{
+            //    new Category{Name="Field"},
+            //    new Category{Name="Track"}
+            //};
+            //category.ForEach(s => context.Category.Add(s));
             context.SaveChanges();
             base.Seed(context);
         }

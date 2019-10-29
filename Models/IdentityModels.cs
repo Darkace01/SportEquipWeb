@@ -35,7 +35,7 @@ namespace SportEquipWeb.Models
         }
 
         public DbSet<Equipment> Equipment { get; set; }
-        public DbSet<Category> Category { get; set; }
+        //public DbSet<Category> Category { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
 
         public static ApplicationDbContext Create()

@@ -25,8 +25,9 @@ namespace SportEquipWeb.Models.Core
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         [DataType(DataType.Date)]
         public DateTime AvailableDate { get; set; }
-        public int CategoryId { get; set; }
-        public Category Category { get; set; }
+        [Required]
+        public string Category { get; set; }
+
         [Range(0,double.MaxValue)]
         public decimal DailyRate { get; set; }
         public bool IsDeleted { get; set; }

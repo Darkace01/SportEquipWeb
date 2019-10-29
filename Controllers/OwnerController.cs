@@ -16,6 +16,10 @@ namespace SportEquipWeb.Controllers
     public class OwnerController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
+        static List<string> Categories = new List<string>()
+        {
+            "Track","Field"
+        };
         // GET: Owner
         public ActionResult Index()
         {
@@ -34,8 +38,7 @@ namespace SportEquipWeb.Controllers
         [Authorize(Roles = "Owner")]
         public ActionResult Create()
         {
-            ViewBag.Category = (from s in db.Category
-                                select s.Name).ToList();
+            ViewBag.Categories = Categories;
             return View();
         }
 
@@ -119,6 +122,12 @@ namespace SportEquipWeb.Controllers
                 DailyRate=equipment.DailyRate,
             };
 
+            
+            ViewBag.SelectedCategory = equipment.Category;
+            Categories.Remove(equipment.Category);
+            ViewBag.Categories = Categories;
+
+
             return View(eq);
         }
 
@@ -127,7 +136,7 @@ namespace SportEquipWeb.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]       
-        public ActionResult Edit([Bind(Include = "Id,Name,ShortDescription,LongDescription,AvailableDate,ImgFile,DailyRate")]EquipmentViewModel eqViewModel)
+        public ActionResult Edit([Bind(Include = "Id,Name,ShortDescription,LongDescription,AvailableDate,Category,ImgFile,DailyRate")]EquipmentViewModel eqViewModel)
         {
 
             if (ModelState.IsValid)
@@ -154,7 +163,7 @@ namespace SportEquipWeb.Controllers
                     equipment.AvailableDate = eqViewModel.AvailableDate;
                     equipment.IsAvaible = eqViewModel.IsAvaible;
                     equipment.DailyRate = eqViewModel.DailyRate;
-
+                    equipment.Category = eqViewModel.Category;
 
                     db.Entry(equipment).State = EntityState.Modified;
                     db.SaveChanges();

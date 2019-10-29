@@ -175,7 +175,7 @@ namespace SportEquipWeb.Controllers
             };
             db.Transactions.Add(transaction);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("OrderComfirmation");
         }
 
         //[HttpGet]
@@ -252,8 +252,10 @@ namespace SportEquipWeb.Controllers
             return View(applicationUser);
         }
 
-        
-        
+        public ActionResult OrderComfirmation()
+        {
+            return View();
+        }
 
         protected override void Dispose(bool disposing)
         {

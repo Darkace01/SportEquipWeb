@@ -270,6 +270,7 @@
     <Content Include="Views\User\Index.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\Owner\Dashboard.cshtml" />
+    <Content Include="Views\Equipment\OrderComfirmation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

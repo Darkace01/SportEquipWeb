@@ -1,0 +1,20 @@
+﻿
+@{
+    ViewBag.Title = "OrderComfirmation";
+}
+<style>
+    .m{
+        margin:auto;
+    }
+</style>
+    <div class="container" style="padding-top:10%;">
+        <div class="row">
+
+                <h1 style="font-size:6rem;" class="text-center">Your Order Has Been Sent</h1>
+                <div class="text-center">
+                    @Html.ActionLink("Continue Shopping", "Index", null, htmlAttributes: new { @class = "btn btn-info text-center btn-lg" })
+                    @Html.ActionLink("View Transactions", "UserTransactions", null, htmlAttributes: new { @class = "btn btn-primary btn-lg" })
+                </div>
+
+        </div>
+    </div>

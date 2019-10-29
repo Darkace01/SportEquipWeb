@@ -6,9 +6,7 @@
 
 <h2>AllUsers</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
+
 <table class="table">
     <tr>
         <th>
@@ -24,9 +22,6 @@
         </th>
         <th>
             Lock
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.LockoutEndDateUtc)
         </th>
 
 
@@ -58,9 +53,6 @@
     }
     <td></td>
 
-    <td>
-        @Html.DisplayFor(modelItem => item.LockoutEndDateUtc)
-    </td>
 
 </tr>
 }

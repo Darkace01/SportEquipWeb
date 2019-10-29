@@ -259,18 +259,20 @@
     <Content Include="Views\Equipment\Index.cshtml" />
     <Content Include="Views\Equipment\ComfirmOrder.cshtml" />
     <Content Include="Views\Equipment\UserTransactions.cshtml" />
-    <Content Include="Views\Equipment\AllTransactions.cshtml" />
-    <Content Include="Views\Equipment\AllUsers.cshtml" />
-    <Content Include="Views\Equipment\LockUser.cshtml" />
+    <Content Include="Views\Admin\AllTransactions.cshtml" />
+    <Content Include="Views\Admin\AllUsers.cshtml" />
+    <Content Include="Views\Admin\LockUser.cshtml" />
     <Content Include="Views\Equipment\UserDetails.cshtml" />
     <Content Include="Views\Admin\EquipmentList.cshtml" />
     <Content Include="Views\Owner\Index.cshtml" />
     <Content Include="Views\Owner\Transactions.cshtml" />
     <Content Include="Views\Admin\Delete.cshtml" />
+    <Content Include="Views\User\Index.cshtml" />
+    <Content Include="Views\Admin\Index.cshtml" />
+    <Content Include="Views\Owner\Dashboard.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\User\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

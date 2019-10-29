@@ -42,6 +42,7 @@ namespace SportEquipWeb.Controllers
         public ActionResult Create()
         {
             ViewBag.Categories = Categories;
+                   
             return View();
         }
 
@@ -81,7 +82,9 @@ namespace SportEquipWeb.Controllers
                 }
                 catch (Exception ex)
                 {
-
+                    //yet to handle
+                    TempData["CreateError"] = "Failed to create equipment. Try again";
+                    return RedirectToAction("Create", equipment.Id);
                     //throw;
                 }
             }
@@ -130,6 +133,7 @@ namespace SportEquipWeb.Controllers
             Categories.Remove(equipment.Category);
             ViewBag.Categories = Categories;
 
+            ViewBag.Error=TempData["EditError"];
 
             return View(eq);
         }
@@ -182,7 +186,8 @@ namespace SportEquipWeb.Controllers
                 }
                 catch (Exception)
                 {
-
+                    TempData["EditError"] = "Error occured while editing equipment. Try again.";
+                    return RedirectToAction("Edit", eqViewModel.Id);
                     //throw;
                 }
             }
@@ -213,6 +218,7 @@ namespace SportEquipWeb.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.Error = TempData["DeleteError"];
             return View(equipment);
         }
 
@@ -237,7 +243,9 @@ namespace SportEquipWeb.Controllers
             }
             catch (Exception)
             {
-
+                TempData["DeleteError"] = "Error occured while deleting. Try again.";
+                return RedirectToAction("Delete",id);
+                
                 //throw;
             }
             return RedirectToAction("Index");

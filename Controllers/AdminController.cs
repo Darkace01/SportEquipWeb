@@ -41,6 +41,10 @@ namespace SportEquipWeb.Controllers
             {
                 return HttpNotFound();
             }
+
+            ViewBag.Error = TempData["DeleteError"];
+
+
             return View(equipment);
         }
 
@@ -65,8 +69,8 @@ namespace SportEquipWeb.Controllers
             }
             catch (Exception)
             {
-
-                //throw;
+                TempData["DeleteError"] = "Delete Failed. Try again. If problem persists, contact administrator";
+                return RedirectToAction("Delete", id);
             }
 
             return RedirectToAction("EquipmentList");
@@ -78,7 +82,7 @@ namespace SportEquipWeb.Controllers
             var allUsers = (from s in db.Users
                             select s).Where(u => u.UserName != "admin@gmail.com").ToList();
 
-
+            ViewBag.Error = TempData["UnlockUserError"];
             return View(allUsers.ToList());
         }
 
@@ -95,9 +99,18 @@ namespace SportEquipWeb.Controllers
                 return HttpNotFound();
             }
 
-            applicationUser.IsEnabled = true;
-            db.Entry(applicationUser).State = EntityState.Modified;
-            db.SaveChanges();
+            try
+            {
+                applicationUser.IsEnabled = true;
+                db.Entry(applicationUser).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+            catch (Exception)
+            {
+
+                TempData["UnlockUserError"] = "Unlock user failed. Try again. If problem persists, contact administrator";
+                return RedirectToAction("AllUsers");
+            }
             return RedirectToAction("AllUsers");
         }
         public ActionResult LockUser(string id)
@@ -113,6 +126,7 @@ namespace SportEquipWeb.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.Error = TempData["LockUserError"];
             return View(applicationUser);
         }
         
@@ -129,9 +143,17 @@ namespace SportEquipWeb.Controllers
                 return HttpNotFound();
             }
 
-            applicationUser.IsEnabled = false;
-            db.Entry(applicationUser).State = EntityState.Modified;
-            db.SaveChanges();
+            try
+            {
+                applicationUser.IsEnabled = false;
+                db.Entry(applicationUser).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+            catch (Exception)
+            {
+                TempData["LockUserError"] = "Lock failed. Try again. If problem persists, contact administrator";
+                return RedirectToAction("LockUser", id);
+            }
             return RedirectToAction("AllUsers");
 
         }

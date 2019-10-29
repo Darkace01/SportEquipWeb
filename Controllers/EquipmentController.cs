@@ -41,26 +41,25 @@ namespace SportEquipWeb.Controllers
         }
         // GET: Equipment
         //[Authorize(Roles = "Owner,Admin,User")]
-        public ActionResult Index(string searchString)
+        public ActionResult Index(string searchString,string category)
         {
-            
+
             var equipment = (from s in db.Equipment
-                             select s).Where(e=>e.IsDeleted==false);
+                             select s).Where(e => e.IsDeleted == false);
             if (!String.IsNullOrEmpty(searchString))
             {
-                try
-                {
-                    equipment = equipment.Where(s => s.Name.ToLower().Contains(searchString.ToLower())
-                                                 || s.Owner.UserName.ToLower().Contains(searchString.ToLower())
-                                                 || s.Category.ToLower().Contains(searchString.ToLower())
-                                                 );
-                }
-                catch (Exception ex)
-                {
+                equipment = equipment.Where(s => s.Name.ToLower().Contains(searchString.ToLower())
+                                             || s.Category.ToLower().Contains(searchString.ToLower())
+                                             );
 
-                    throw;
-                }
             }
+
+            if(!(String.IsNullOrEmpty(category)) && category != "All")
+            {
+                equipment = equipment.Where(s => s.Category.ToLower() == category.ToLower());
+            }
+
+
             foreach (var item in equipment.ToList())
             {
                 int res = item.AvailableDate.CompareTo(DateTime.Now);
@@ -75,7 +74,16 @@ namespace SportEquipWeb.Controllers
                 else
                     item.IsAvaible = true;
             }
-           return View(equipment.ToList());
+            List<string> categories = new List<string>()
+            {
+                "All","Field","Track"
+            };
+            ViewBag.SelectedCategory = category;
+            categories.Remove(category);
+            ViewBag.Categories = categories;
+
+
+            return View(equipment.ToList());
         }
 
 
@@ -121,6 +129,7 @@ namespace SportEquipWeb.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.Error = TempData["DeleteEquipError"];
             return View(equipment);
         }
 
@@ -130,15 +139,26 @@ namespace SportEquipWeb.Controllers
         [Authorize(Roles = "Owner,Admin")]
         public ActionResult DeleteConfirmed(int id)
         {
-            Equipment equipment = db.Equipment.Find(id);
-            string path = Request.MapPath(equipment.ImgPath);
+            string imgPath = "";
+            try
+            {
+                Equipment equipment = db.Equipment.Find(id);
+                imgPath = equipment.ImgPath;
+                equipment.IsDeleted = true;
+                db.Entry(equipment).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+            catch (Exception)
+            {
+                TempData["DeleteEquipError"] = "Error occured while deleteing equipment. Try again. If error persists, contact administrator";
+                return RedirectToAction("Delete", id);
+            }
+
+            string path = Request.MapPath(imgPath);
             if (System.IO.File.Exists(path))
             {
                 System.IO.File.Delete(path);
             }
-            equipment.IsDeleted = true;
-            db.Entry(equipment).State = EntityState.Modified;
-            db.SaveChanges();
             return RedirectToAction("Index");
         }
 
@@ -149,25 +169,33 @@ namespace SportEquipWeb.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Equipment equipment = db.Equipment.Find(id);
-            if (equipment == null || equipment.IsDeleted==true)
+            try
             {
-                return HttpNotFound();
+                Equipment equipment = db.Equipment.Find(id);
+                if (equipment == null || equipment.IsDeleted == true)
+                {
+                    return HttpNotFound();
+                }
+
+                string userId = User.Identity.GetUserId();
+                ApplicationUser applicationUser = db.Users.Find(userId);
+
+
+                Transaction transaction = new Transaction()
+                {
+                    Equipment = equipment,
+                    User = applicationUser,
+                    DateCreated = DateTime.Now,
+                };
+                db.Transactions.Add(transaction);
+                db.SaveChanges();
             }
-
-            string userId = User.Identity.GetUserId();
-            ApplicationUser applicationUser = db.Users.Find(userId);
-
-
-            Transaction transaction = new Transaction()
+            catch (Exception)
             {
-                Equipment = equipment,
-                User = applicationUser,
-                DateCreated = DateTime.Now,
-            };
-            db.Transactions.Add(transaction);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+                TempData["OrderError"] = "Failed to Order. Try again";
+                return RedirectToAction("ConfirmOrder", id);
+            }
+            return RedirectToAction("OrderComfirmation");
         }
 
         //[HttpGet]
@@ -199,6 +227,7 @@ namespace SportEquipWeb.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.Error = TempData["OrderError"];
             return View(equipment);
         }
         [Authorize(Roles = "User")]
@@ -244,8 +273,10 @@ namespace SportEquipWeb.Controllers
             return View(applicationUser);
         }
 
-        
-        
+        public ActionResult OrderComfirmation()
+        {
+            return View();
+        }
 
         protected override void Dispose(bool disposing)
         {

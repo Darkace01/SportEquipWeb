@@ -12,24 +12,32 @@
 <link href="~/Content/Site.css" rel="stylesheet" />
 <div class="container" style="padding-top:15px;">
     <div class="row">
-        @*<div class="col-md-4">
-            @Html.ActionLink("Create New", "Create","Owner", null, htmlAttributes: new { @class = "btn btn-info" })
-        </div>*@
+        
         <div class="col-md-8">
             @using (Html.BeginForm())
             {
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="col-md-6">
-                            @Html.TextBox("SearchString", null, htmlAttributes: new { @class = "form-control" })
-                        </div>
-                        <div class="col-md-6"><input type="submit" value="Search" class="btn btn-success" /></div>
-                    </div>
-                </div>
 
+                <div class="row">
+                    <div class="col-md-4">
+                        Category:
+                        <select name="category" class="form-control">
+                            @if (!(string.IsNullOrEmpty(ViewBag.SelectedCategory)))
+                            {
+                                <option value="@ViewBag.SelectedCategory">@ViewBag.SelectedCategory</option>
+                            }
+                            @foreach (var item in ViewBag.Categories)
+                            {
+                                <option value="@item">@item</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-4">Search:@Html.TextBox("SearchString", null, htmlAttributes: new { @class = "form-control" })</div>
+                    <div class="col-md-4"><input type="submit" value="Search" class="btn btn-success" style="width:300px;margin-top:20px" /></div>
+                </div>
             }
         </div>
-        </div>
+        <div class="col-md-2"></div>
+    </div>
 </div>
     <hr />
 <div class="container">

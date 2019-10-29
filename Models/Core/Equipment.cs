@@ -21,6 +21,9 @@ namespace SportEquipWeb.Models.Core
         [Display(Name = "Long Description")]
         public string LongDescription { get; set; }
         public bool IsAvaible { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        [DataType(DataType.Date)]
         public DateTime AvailableDate { get; set; }
         public int CategoryId { get; set; }
         public Category Category { get; set; }
@@ -31,5 +34,8 @@ namespace SportEquipWeb.Models.Core
         public string ImgPath { get; set; }
         [NotMapped]
         public HttpPostedFileBase ImgFile { get; set; }
+
+
+        public string MyProperty { get; set; }
     }
 }

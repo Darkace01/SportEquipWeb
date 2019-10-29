@@ -17,6 +17,9 @@ namespace SportEquipWeb.Models
         [Display(Name = "Long Description")]
         public string LongDescription { get; set; }
         public bool IsAvaible { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        [DataType(DataType.Date)]
         public DateTime AvailableDate { get; set; }
         [Range(0, double.MaxValue)]
         public decimal DailyRate { get; set; }

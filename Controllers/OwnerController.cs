@@ -114,7 +114,6 @@ namespace SportEquipWeb.Controllers
                 Name=equipment.Name,
                 ShortDescription=equipment.ShortDescription,
                 LongDescription=equipment.LongDescription,
-                //IsAvaible=equipment.IsAvaible,
                 ImgPath=equipment.ImgPath,
                 AvailableDate=equipment.AvailableDate,
                 DailyRate=equipment.DailyRate,

@@ -41,6 +41,10 @@ namespace SportEquipWeb.Controllers
             {
                 return HttpNotFound();
             }
+
+            ViewBag.Error = TempData["DeleteError"];
+
+
             return View(equipment);
         }
 
@@ -65,7 +69,7 @@ namespace SportEquipWeb.Controllers
             }
             catch (Exception)
             {
-                ViewBag.Error = "Delete Failed. Try again. If problem persists, contact administrator";
+                TempData["DeleteError"] = "Delete Failed. Try again. If problem persists, contact administrator";
                 return RedirectToAction("Delete", id);
             }
 
@@ -78,7 +82,7 @@ namespace SportEquipWeb.Controllers
             var allUsers = (from s in db.Users
                             select s).Where(u => u.UserName != "admin@gmail.com").ToList();
 
-
+            ViewBag.Error = TempData["UnlockUserError"];
             return View(allUsers.ToList());
         }
 
@@ -104,7 +108,7 @@ namespace SportEquipWeb.Controllers
             catch (Exception)
             {
 
-                ViewBag.Error = "Unlock user failed. Try again. If problem persists, contact administrator";
+                TempData["UnlockUserError"] = "Unlock user failed. Try again. If problem persists, contact administrator";
                 return RedirectToAction("AllUsers");
             }
             return RedirectToAction("AllUsers");
@@ -122,6 +126,7 @@ namespace SportEquipWeb.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.Error = TempData["LockUserError"];
             return View(applicationUser);
         }
         
@@ -146,7 +151,7 @@ namespace SportEquipWeb.Controllers
             }
             catch (Exception)
             {
-                ViewBag.Error = "Lock failed. Try again. If problem persists, contact administrator";
+                TempData["LockUserError"] = "Lock failed. Try again. If problem persists, contact administrator";
                 return RedirectToAction("LockUser", id);
             }
             return RedirectToAction("AllUsers");

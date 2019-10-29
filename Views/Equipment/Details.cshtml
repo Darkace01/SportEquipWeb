@@ -8,88 +8,75 @@
 <div>
     <h4>Equipment</h4>
     <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
+   
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-3" style="font-weight:800">@Html.DisplayNameFor(model => model.Name) :</div>
+                <div class="col-md-6">@Html.DisplayFor(model => model.Name)</div>
+            </div>
+            <div class="row">
+                <div class="col-md-3" style="font-weight:800">@Html.DisplayNameFor(model => model.ShortDescription) :</div>
+                <div class="col-md-6">@Html.DisplayFor(model => model.ShortDescription)</div>
+            </div>
+            <div class="row">
+                <div class="col-md-3" style="font-weight:800">@Html.DisplayNameFor(model => model.LongDescription) :</div>
+                <div class="col-md-6">@Html.DisplayFor(model => model.LongDescription)</div>
+            </div>
+            <div class="row">
+                <div class="col-md-3" style="font-weight:800">@Html.DisplayNameFor(model => model.AvailableDate) :</div>
+                <div class="col-md-6">@Html.DisplayFor(model => model.AvailableDate)</div>
+            </div>
+            <div class="row">
+                <div class="col-md-3" style="font-weight:800">@Html.DisplayNameFor(model => model.IsAvaible) :</div>
+                <div class="col-md-6">
+                    @{
 
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
+                        if (ViewBag.Available == true)
+                        {
+                            <dd>Available</dd>
+                        }
+                        else
+                        {
+                            <dd>Not Available</dd>
+                        }
+                    }
+                </div>
+            </div>
+            <hr />
+            <div class="row">
+                <div class="col-md-2">
+                    @if (Request.IsAuthenticated)
+                    {
+                        if (User.IsInRole("Owner"))
+                        {
+                            @Html.ActionLink("Back to List", "Index", "Owner")
+                        }
+                        else if (User.IsInRole("Admin"))
+                        {
+                            @Html.ActionLink("Back to List", "EquipmentList", "Admin")
+                        }
 
-        <dt>
-            @Html.DisplayNameFor(model => model.ShortDescription)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.ShortDescription)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.LongDescription)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.LongDescription)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.AvailableDate)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.AvailableDate)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.IsAvaible)
-        </dt>
-
-        @{
-
-            if (ViewBag.Available == true)
-            {
-                <dd>Available</dd>
-            }
-            else
-            {
-                <dd>Not Available</dd>
-            }
-        }
-
-
-        <dt>
-            @Html.DisplayNameFor(model => model.ImgPath)
-        </dt>
-
-        <dd>
-            <img class="img-responsive" src="@Url.Content(Model.ImgPath)" style="width:300px; height:300px;">
-        </dd>
-
-    </dl>
+                    }
+                    else
+                    {
+                        @Html.ActionLink("Back to List", "Index",null,htmlAttributes: new { @class="btn btn-info"})
+                    }
+                </div>
+                <div class="col-md-2">
+                    @{
+                        if (ViewBag.Available == true)
+                        {
+                            @Html.ActionLink("Order Now", "ComfirmOrder", new { id = Model.Id }, htmlAttributes: new { @class = "btn btn-danger" })
+                        }
+                    }
+                </div>
+            </div>
+           
+        </div>
+        <div class="col-md-6">
+                <img class="img-responsive" src="@Url.Content(Model.ImgPath)" style="width:80%; height:300px;">
+        </div>
+    </div>
 </div>
-<p>
-    @{
-        if (ViewBag.Available == true)
-        {
-            @Html.ActionLink("Order Now", "ComfirmOrder", new { id = Model.Id }, htmlAttributes: new { @class = "btn btn-danger" })
-        }
-    }
-
-
-    @*@Html.ActionLink("Delete", "Delete", new { id = Model.Id }, htmlAttributes: new { @class = "" }) |*@
-
-    @if (Request.IsAuthenticated)
-    {
-        if (User.IsInRole("Owner"))
-        {
-            @Html.ActionLink("Back to List", "Index", "Owner")
-        }
-        else if (User.IsInRole("Admin"))
-        {
-            @Html.ActionLink("Back to List", "EquipmentList", "Admin")
-        }
-        else
-        {
-            @Html.ActionLink("Back to List", "Index")
-        }
-    }
-</p>

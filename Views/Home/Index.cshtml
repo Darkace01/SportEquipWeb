@@ -1,104 +1,103 @@
-﻿@{
+﻿@model IEnumerable<SportEquipWeb.Models.Core.Equipment>
+@{
     ViewBag.Title = "Home Page";
 }
 
 @using Microsoft.AspNet.Identity
-<div class="container">
-    @if (Request.IsAuthenticated)
-    {
-        if (User.IsInRole("Admin"))
+    <div class="container">
+        @if (Request.IsAuthenticated)
         {
-    <div class="row">
-        <div class="col-md-4">
-            <div class="jumbotron">
-                <h2>View All Equipment</h2>
-                <p>Some quick example to View All Equipment</p>
-                <p><a class="btn btn-primary btn-md" href="@Url.Action("EquipmentList","Admin")" role="button">View All</a></p>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="jumbotron">
-                <h2>View All Transactions</h2>
-                <p>Some quick example to View All Transactions</p>
-                <p><a class="btn btn-primary btn-md" href="@Url.Action("AllTransactions","Admin")" role="button">View All</a></p>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="jumbotron">
-                <h2>View All Users</h2>
-                <p>Some quick example to View All Users</p>
-                <p><a class="btn btn-primary btn-md" href="@Url.Action("AllUsers","Admin")" role="button">View All</a></p>
-            </div>
-        </div>
-    </div>
+            if (User.IsInRole("Admin"))
+            {
+                Response.Redirect("~/Admin/index",false);
+            }
+            else if (User.IsInRole("User"))
+            {
+                Response.Redirect("~/User/index",false);
+            }
+            else if (User.IsInRole("Owner"))
+            {
+                Response.Redirect("~/Owner/Dashboard",false);
+            }
+
         }
-        else if (User.IsInRole("User"))
+        else
         {
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="jumbotron">
-                        <h2>View All Equipment</h2>
-                        <p>Some quick example to View All Equipment</p>
-                        <p><a class="btn btn-primary btn-md" href="@Url.Content("~/Equipment/Index")" role="button">View All</a></p>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="jumbotron">
-                        <h2>View All Transactions</h2>
-                        <p>Some quick example to View All Equipment</p>
-                        <p><a class="btn btn-primary btn-md" href="@Url.Content("~/Equipment/UserTransactions")" role="button">View All</a></p>
+            <h2 class="page-header text-center">Home Page</h2>
+            <link href="~/Content/Site.css" rel="stylesheet" />
+            <div class="container" style="padding-top:15px;">
+                <div class="row">
+                    @*<div class="col-md-4">
+                        @Html.ActionLink("Create New", "Create","Owner", null, htmlAttributes: new { @class = "btn btn-info" })
+                    </div>*@
+                    <div class="col-md-8">
+                        @using (Html.BeginForm())
+                        {
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="col-md-6">
+                                        @Html.TextBox("SearchString", null, htmlAttributes: new { @class = "form-control" })
+                                    </div>
+                                    <div class="col-md-6"><input type="submit" value="Search" class="btn btn-success" /></div>
+                                </div>
+                            </div>
+
+                        }
                     </div>
                 </div>
             </div>
-        }
-        else if (User.IsInRole("Owner"))
-        {
-<div class="row">
-    <div class="col-md-4">
-
-        <div class="jumbotron">
-            <h2>Add An Equipment</h2>
-            <p>Some quick example to Add an Equipment</p>
-            <p><a class="btn btn-primary btn-md" href="@Url.Content("~/Owner/Create")" role="button">Create</a></p>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="jumbotron">
-            <h2>View All Equipment</h2>
-            <p>Some quick example to View All Equipment</p>
-            <p><a class="btn btn-primary btn-md" href="@Url.Content("~/Owner/Index")" role="button">View All</a></p>
-        </div>
+            <hr />
+            <div class="container">
+                <div class="row">
+                    @foreach (var item in Model)
+                    {
 
 
-    </div>
-    <div class="col-md-4">
-        <div class="jumbotron">
-            <h2>View All Transactions</h2>
-            <p>Some quick example to View All Transactions</p>
-            <p><a class="btn btn-primary btn-md" href="@Url.Content("~/Owner/Transactions")" role="button">View All</a></p>
-        </div>
+                        <div class="col-lg-4 col-md-4" style="margin-bottom:20px;">
+                            <a href="@Url.Action("Details", "Equipment", new {id = item.Id })" class="decoration">
+                                <div class="event-card" style="width: 37rem;">
+                                    <img src="@Url.Content(item.ImgPath)" class="card-img-top img-responsive" alt="..." style="width:370px; height:230px;">
+                                    <div class="event-card-header">
+                                        <h5 class="event-card-title" style="text-align:center">@Html.DisplayFor(modelItem => item.Name)</h5>
+                                        <p class="card-text">@Html.DisplayFor(modelItem => item.ShortDescription)</p>
+                                    </div>
+                                    <ul class="event-list-group list-group-flush">
+                                        <li class="event-list-group-item" style="text-align:center">
+                                            @{
 
+                                                if (item.IsAvaible == true)
+                                                {
+                                                    <p>Available</p>
+                                                }
+                                                else
+                                                {
+                                                    <p>Not Available</p>
+                                                }
+                                            }
 
-    </div>
-</div>
-        }
+                                        </li>
 
-    }
-    else
-    {
+                                    </ul>
+                                    @{
+                                        if (item.IsAvaible)
+                                        {
+                                            @Html.ActionLink("Order Now", "ComfirmOrder", "Equipment", new { id = item.Id }, htmlAttributes: new { @class = "btn event-btn " })
+                                        }
+                                        else
+                                        {
+                                            @Html.ActionLink("Order Now", "ComfirmOrder", "Equipment", new { id = item.Id }, htmlAttributes: new { @class = "btn event-btn disabled" })
+                                        }
+                                    }
+                                    @*@Html.ActionLink("Learn More", "Details", new { id = item.Id }, new { @class = "btn event-btn" })*@
 
-        <div class="container" style="padding-top:50px">
-            <div class="row">
-                <div class="col-md-6 " style="padding:0 10%">
-                    <h1>Welcome to SportEquipWeb</h1>
-                    <br />
-                    <h3>Manage all results and units.</h3>
-                    <p>please <a href="@Url.Content("~/Account/login")" class="btn btn-info">login</a> to use </p>
-                </div>
-                <div class="col-md-6">
-                    <img src="https://miro.medium.com/max/3200/0*z43TuPXCcl_-RizQ.jpg" alt="manager pic" style="width:45vw;" />
+                                </div>
+                            </a>
+
+                        </div>
+
+                    }
+
                 </div>
             </div>
-        </div>
-    }
-</div>
+        }
+    </div>

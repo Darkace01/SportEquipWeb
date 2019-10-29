@@ -31,7 +31,10 @@ namespace SportEquipWeb.Controllers
             ViewBag.OwnnerName = applicationUser.UserName;
             return View(equipment.ToList());
         }
-
+        public ActionResult Dashboard()
+        {
+            return View();
+        }
 
 
         // GET: Owner/Create
@@ -82,7 +85,7 @@ namespace SportEquipWeb.Controllers
                     //throw;
                 }
             }
-
+            ViewBag.Categories = Categories;
             return View(equipment);
         }
 

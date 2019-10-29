@@ -23,7 +23,7 @@ namespace SportEquipWeb.Controllers
         {
         }
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
         {
             UserManager = userManager;
             SignInManager = signInManager;
@@ -35,9 +35,9 @@ namespace SportEquipWeb.Controllers
             {
                 return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
             }
-            private set 
-            { 
-                _signInManager = value; 
+            private set
+            {
+                _signInManager = value;
             }
         }
 
@@ -75,10 +75,13 @@ namespace SportEquipWeb.Controllers
             }
 
             var user = UserManager.FindByEmailAsync(model.Email).Result;
-            if (!user.IsEnabled)
+            if (user!=null)
             {
-                ModelState.AddModelError("", "User has been blocked. contact admin to unlock");
-                return View(model);
+                if (!user.IsEnabled)
+                {
+                    ModelState.AddModelError("", "User has been blocked. contact admin to unlock");
+                    return View(model);
+                } 
             }
 
             // This doesn't count login failures towards account lockout
@@ -128,7 +131,7 @@ namespace SportEquipWeb.Controllers
             // If a user enters incorrect codes for a specified amount of time then the user account 
             // will be locked out for a specified amount of time. 
             // You can configure the account lockout settings in IdentityConfig
-            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent:  model.RememberMe, rememberBrowser: model.RememberBrowser);
+            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent: model.RememberMe, rememberBrowser: model.RememberBrowser);
             switch (result)
             {
                 case SignInStatus.Success:
@@ -155,11 +158,11 @@ namespace SportEquipWeb.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Register(RegisterViewModel model,string role)
+        public async Task<ActionResult> Register(RegisterViewModel model, string role)
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, IsEnabled = true, };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 ApplicationDbContext context = new ApplicationDbContext();
                 if (result.Succeeded)
@@ -168,7 +171,7 @@ namespace SportEquipWeb.Controllers
                     if (String.Compare(role, "owner") == 0)
                     {
                         var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
-                        
+
                         if (!roleManager.RoleExists("owner"))
                         {
                             var userRole = new Microsoft.AspNet.Identity.EntityFramework.IdentityRole();
@@ -190,8 +193,8 @@ namespace SportEquipWeb.Controllers
                         UserManager.AddToRole(user.Id, "user");
                     }
 
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
+                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
@@ -439,7 +442,7 @@ namespace SportEquipWeb.Controllers
         }
 
 
-       
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

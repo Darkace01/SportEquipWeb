@@ -68,13 +68,28 @@
 </div>
 <p>
     @{
-        if (ViewBag.Available==true)
+        if (ViewBag.Available == true)
         {
             @Html.ActionLink("Order Now", "ComfirmOrder", new { id = Model.Id }, htmlAttributes: new { @class = "btn btn-danger" })
         }
     }
 
 
-    @Html.ActionLink("Delete", "Delete", new { id = Model.Id }, htmlAttributes: new { @class = "" }) |
-    @Html.ActionLink("Back to List", "Index")
+    @*@Html.ActionLink("Delete", "Delete", new { id = Model.Id }, htmlAttributes: new { @class = "" }) |*@
+
+    @if (Request.IsAuthenticated)
+    {
+        if (User.IsInRole("Owner"))
+        {
+            @Html.ActionLink("Back to List", "Index", "Owner")
+        }
+        else if (User.IsInRole("Admin"))
+        {
+            @Html.ActionLink("Back to List", "EquipmentList", "Admin")
+        }
+        else
+        {
+            @Html.ActionLink("Back to List", "Index")
+        }
+    }
 </p>

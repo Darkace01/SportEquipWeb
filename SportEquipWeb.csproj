@@ -254,7 +254,7 @@
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Owner\Create.cshtml" />
-    <Content Include="Views\Equipment\Delete.cshtml" />
+    <Content Include="Views\Owner\Delete.cshtml" />
     <Content Include="Views\Equipment\Details.cshtml" />
     <Content Include="Views\Owner\Edit.cshtml" />
     <Content Include="Views\Equipment\Index.cshtml" />
@@ -264,13 +264,13 @@
     <Content Include="Views\Equipment\AllUsers.cshtml" />
     <Content Include="Views\Equipment\LockUser.cshtml" />
     <Content Include="Views\Equipment\UserDetails.cshtml" />
-    <Content Include="Views\Equipment\EquipmentList.cshtml" />
+    <Content Include="Views\Admin\EquipmentList.cshtml" />
     <Content Include="Views\Owner\Index.cshtml" />
     <Content Include="Views\Owner\Transactions.cshtml" />
+    <Content Include="Views\Admin\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Admin\" />
     <Folder Include="Views\User\" />
   </ItemGroup>
   <ItemGroup>

@@ -26,7 +26,7 @@ namespace SportEquipWeb.Models.Core
         public Category Category { get; set; }
         [Range(0,double.MaxValue)]
         public decimal DailyRate { get; set; }
-
+        public bool IsDeleted { get; set; }
         [Display(Name = "Image")]
         public string ImgPath { get; set; }
         [NotMapped]

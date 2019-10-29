@@ -22,7 +22,7 @@ namespace SportEquipWeb.Controllers
             string userId = User.Identity.GetUserId();
             ApplicationUser applicationUser = db.Users.Find(userId);
             var equipment = (from s in db.Equipment
-                             select s).Where(u => u.Owner.Id == userId);
+                             select s).Where(u => u.Owner.Id == userId && u.IsDeleted==false);
 
             ViewBag.OwnnerName = applicationUser.UserName;
             return View(equipment.ToList());
@@ -67,6 +67,7 @@ namespace SportEquipWeb.Controllers
                     }
                     equipment.ApplicationUserId = userId;
                     equipment.Owner = applicationUser;
+                    equipment.IsDeleted = false;
                     db.Equipment.Add(equipment);
 
                     db.SaveChanges();
@@ -75,7 +76,7 @@ namespace SportEquipWeb.Controllers
                 catch (Exception ex)
                 {
 
-                    throw;
+                    //throw;
                 }
             }
 
@@ -87,7 +88,7 @@ namespace SportEquipWeb.Controllers
             string userId = User.Identity.GetUserId();
             ApplicationUser applicationUser = db.Users.Find(userId);
             var equipment = (from s in db.Equipment
-                             select s).Where(u=>u.Owner.Id==userId);
+                             select s).Where(u=>u.Owner.Id==userId && u.IsDeleted==false);
 
             ViewBag.OwnnerName = applicationUser.UserName;
             return View(equipment.ToList());
@@ -102,7 +103,7 @@ namespace SportEquipWeb.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Equipment equipment = db.Equipment.Find(id);
-            if (equipment == null)
+            if (equipment == null || equipment.IsDeleted==true)
             {
                 return HttpNotFound();
             }
@@ -127,34 +128,52 @@ namespace SportEquipWeb.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]       
-        public ActionResult Edit([Bind(Include = "Id,Name,ShortDescription,LongDescription,AvailableDate,ImgFile,DailyRate")] Equipment eqViewModel)
+        public ActionResult Edit([Bind(Include = "Id,Name,ShortDescription,LongDescription,AvailableDate,ImgFile,DailyRate")]EquipmentViewModel eqViewModel)
         {
 
             if (ModelState.IsValid)
             {
-                Equipment equipment = db.Equipment.Find(eqViewModel.Id);
-                if (eqViewModel.ImgFile != null)
+                try
                 {
-                    string fileName = Path.GetFileNameWithoutExtension(eqViewModel.ImgFile.FileName);
-                    string extension = Path.GetExtension(eqViewModel.ImgFile.FileName);
+                    Equipment equipment = db.Equipment.Find(eqViewModel.Id);
+                    string previousImagePath = "";
+                    if (eqViewModel.ImgFile != null)
+                    {
+                        string fileName = Path.GetFileNameWithoutExtension(eqViewModel.ImgFile.FileName);
+                        string extension = Path.GetExtension(eqViewModel.ImgFile.FileName);
 
-                    fileName = fileName + DateTime.Now.ToString("yyyymmddhhmmssfff") + extension;
-                    equipment.ImgPath = "~/Content/IMAGES/" + fileName;
-                    fileName = Path.Combine(Server.MapPath("~/Content/IMAGES/"), fileName);
-                    eqViewModel.ImgFile.SaveAs(fileName);
+                        fileName = fileName + DateTime.Now.ToString("yyyymmddhhmmssfff") + extension;
+                        previousImagePath =  equipment.ImgPath;
+                        equipment.ImgPath = "~/Content/IMAGES/" + fileName;
+                        fileName = Path.Combine(Server.MapPath("~/Content/IMAGES/"), fileName);
+                        eqViewModel.ImgFile.SaveAs(fileName);
+                    }
+
+                    equipment.Name = eqViewModel.Name;
+                    equipment.ShortDescription = eqViewModel.ShortDescription;
+                    equipment.LongDescription = eqViewModel.LongDescription;
+                    equipment.AvailableDate = eqViewModel.AvailableDate;
+                    equipment.IsAvaible = eqViewModel.IsAvaible;
+                    equipment.DailyRate = eqViewModel.DailyRate;
+
+
+                    db.Entry(equipment).State = EntityState.Modified;
+                    db.SaveChanges();
+
+                    //delete previous image
+                    string path = Request.MapPath(previousImagePath);
+                    if (System.IO.File.Exists(path))
+                    {
+                        System.IO.File.Delete(path);
+                    }
+
+                    return RedirectToAction("Index");
                 }
+                catch (Exception)
+                {
 
-                equipment.Name = eqViewModel.Name;
-                equipment.ShortDescription = eqViewModel.ShortDescription;
-                equipment.LongDescription = eqViewModel.LongDescription;
-                equipment.AvailableDate = eqViewModel.AvailableDate;
-                equipment.IsAvaible = eqViewModel.IsAvaible;
-                equipment.DailyRate = eqViewModel.DailyRate;
-
-
-                db.Entry(equipment).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                    //throw;
+                }
             }
             return View(eqViewModel);
         }
@@ -169,6 +188,50 @@ namespace SportEquipWeb.Controllers
             var userTransaction = transaction.Where(t => t.Equipment.Owner.Id == userId).Include(e => e.Equipment).Include(u => u.User).ToList();
             return View(userTransaction);
         }
+
+        // GET: Owner/Delete/5
+        [Authorize(Roles = "Owner")]
+        public ActionResult Delete(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Equipment equipment = db.Equipment.Find(id);
+            if (equipment == null || equipment.IsDeleted == true)
+            {
+                return HttpNotFound();
+            }
+            return View(equipment);
+        }
+
+        // POST: Owner/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Owner")]
+        public ActionResult DeleteConfirmed(int id)
+        {
+            try
+            {
+                Equipment equipment = db.Equipment.Find(id);
+
+                equipment.IsDeleted = true;
+                db.Entry(equipment).State = EntityState.Modified;
+                db.SaveChanges();
+                string path = Request.MapPath(equipment.ImgPath);
+                if (System.IO.File.Exists(path))
+                {
+                    System.IO.File.Delete(path);
+                }
+            }
+            catch (Exception)
+            {
+
+                //throw;
+            }
+            return RedirectToAction("Index");
+        }
+
 
     }
 }

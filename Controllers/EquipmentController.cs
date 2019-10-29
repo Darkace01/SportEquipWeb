@@ -45,7 +45,7 @@ namespace SportEquipWeb.Controllers
         {
             
             var equipment = (from s in db.Equipment
-                             select s);
+                             select s).Where(e=>e.IsDeleted==false);
             if (!String.IsNullOrEmpty(searchString))
             {
                 try
@@ -87,6 +87,10 @@ namespace SportEquipWeb.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Equipment equipment = db.Equipment.Find(id);
+            if (equipment == null || equipment.IsDeleted == true)
+            {
+                return HttpNotFound();
+            }
 
             int res = equipment.AvailableDate.CompareTo(DateTime.Now);
             if (res > 0)
@@ -105,45 +109,6 @@ namespace SportEquipWeb.Controllers
             return View(equipment);
         }
 
-        
-        // GET: Equipment/Edit/5
-        [Authorize(Roles = "Owner")]
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Equipment equipment = db.Equipment.Find(id);
-            if (equipment == null)
-            {
-                return HttpNotFound();
-            }
-            return View(equipment);
-        }
-
-        // POST: Equipment/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Owner")]
-        public ActionResult Edit([Bind(Include = "Id,Name,ShortDescription,LongDescription,AvailableDate,ImgPath")] Equipment equipment)
-        {
-            if (ModelState.IsValid)
-            {
-                string path = Request.MapPath(equipment.ImgPath);
-                if (System.IO.File.Exists(path))
-                {
-                    System.IO.File.Delete(path);
-                }
-                db.Entry(equipment).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(equipment);
-        }
-
         // GET: Equipment/Delete/5
         [Authorize(Roles = "Owner,Admin")]
         public ActionResult Delete(int? id)
@@ -153,7 +118,7 @@ namespace SportEquipWeb.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Equipment equipment = db.Equipment.Find(id);
-            if (equipment == null)
+            if (equipment == null || equipment.IsDeleted==true)
             {
                 return HttpNotFound();
             }
@@ -172,8 +137,8 @@ namespace SportEquipWeb.Controllers
             {
                 System.IO.File.Delete(path);
             }
-            
-            db.Equipment.Remove(equipment);
+            equipment.IsDeleted = true;
+            db.Entry(equipment).State = EntityState.Modified;
             db.SaveChanges();
             return RedirectToAction("Index");
         }
@@ -186,7 +151,7 @@ namespace SportEquipWeb.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Equipment equipment = db.Equipment.Find(id);
-            if (equipment == null)
+            if (equipment == null || equipment.IsDeleted==true)
             {
                 return HttpNotFound();
             }
@@ -215,7 +180,7 @@ namespace SportEquipWeb.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Equipment equipment = db.Equipment.Find(id);
-            if(equipment == null)
+            if(equipment == null ||equipment.IsDeleted==true)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
@@ -329,14 +294,7 @@ namespace SportEquipWeb.Controllers
             return View(applicationUser);
         }
 
-        [Authorize(Roles ="Admin")]
-        public ActionResult EquipmentList()
-        {
-            var equipment = (from s in db.Equipment
-                             select s);
-            return View(equipment.ToList());
-        }
-     
+        
         [Authorize(Roles = "Admin")]
         public ActionResult LockOutConfirmed(string id)
         {

@@ -16,11 +16,17 @@ namespace SportEquipWeb.Models
         public string ShortDescription { get; set; }
         [Display(Name = "Long Description")]
         public string LongDescription { get; set; }
+
+        [Display(Name = "Is Available ?")]
         public bool IsAvaible { get; set; }
 
+        [Display(Name = "Available Date")]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         [DataType(DataType.Date)]
         public DateTime AvailableDate { get; set; }
+
+
+        [Display(Name = "Daily Rate")]
         [Range(0, double.MaxValue)]
         public decimal DailyRate { get; set; }
         [Required]

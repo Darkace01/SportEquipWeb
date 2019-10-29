@@ -78,8 +78,7 @@ namespace SportEquipWeb.Controllers
            return View(equipment.ToList());
         }
 
-        // GET: Equipment/Details/5
-        [Authorize(Roles = "Owner,Admin,User")]
+
         public ActionResult Details(int? id)
         {
             if (id == null)

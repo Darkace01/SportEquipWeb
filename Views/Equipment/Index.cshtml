@@ -46,48 +46,38 @@
         {
 
 
-            <div class="col-lg-4 col-md-4" style="margin-bottom:20px;">
-                <a href="@Url.Action("Details", "Equipment", new {id = item.Id })" class="decoration">
-                    <div class="event-card" style="width: 37rem;">
-                        <img src="@Url.Content(item.ImgPath)" class="card-img-top img-responsive" alt="..." style="width:370px; height:230px;">
-                        <div class="event-card-header">
-                            <h5 class="event-card-title" style="text-align:center">@Html.DisplayFor(modelItem => item.Name)</h5>
-                            <p class="card-text">@Html.DisplayFor(modelItem => item.ShortDescription)</p>
-                        </div>
-                        <ul class="event-list-group list-group-flush">
-                            <li class="event-list-group-item" style="text-align:center">
+        <div class="col-lg-4 col-md-4" style="margin-bottom:20px;">
+            <a href="@Url.Action("Details", "Equipment", new {id = item.Id })" class="decoration">
+                <div class="event-card" style="width: 37rem;">
+                    <img src="@Url.Content(item.ImgPath)" class="card-img-top img-responsive" alt="..." style="width:370px; height:230px;">
+                    <div class="event-card-header">
+                        <h5 class="event-card-title" style="text-align:left;">@Html.DisplayFor(modelItem => item.Name)</h5>
+
+                        <div class="card-text">
+                            <span class="">₦@Html.DisplayFor(modelItem => item.DailyRate)</span>
+                            <span class="pull-right">
                                 @{
 
                                     if (item.IsAvaible == true)
                                     {
-                                        <p>Available</p>
+                                        <span>Available</span>
                                     }
                                     else
                                     {
-                                        <p>Not Available</p>
+                                        <span>Not Available</span>
                                     }
                                 }
-
-                            </li>
-
-                        </ul>
-                        @{
-                            if (item.IsAvaible)
-                            {
-                                @Html.ActionLink("Order Now", "ComfirmOrder", "Equipment", new { id = item.Id }, htmlAttributes: new { @class = "btn event-btn " })
-                            }
-                            else
-                            {
-                                @Html.ActionLink("Order Now", "ComfirmOrder", "Equipment", new { id = item.Id }, htmlAttributes: new { @class = "btn event-btn disabled" })
-                            }
-                        }
-                        @*@Html.ActionLink("Learn More", "Details", new { id = item.Id }, new { @class = "btn event-btn" })*@
-
+                            </span>
+                        </div>
+                        <p class="card-text">@Html.DisplayFor(modelItem => item.ShortDescription)</p>
                     </div>
-                </a>
 
-            </div>
 
+
+                </div>
+            </a>
+
+        </div>
         }
 
     </div>

@@ -28,22 +28,32 @@
             <div class="container" style="padding-top:15px;">
                 <div class="row">
                     @*<div class="col-md-4">
-                        @Html.ActionLink("Create New", "Create","Owner", null, htmlAttributes: new { @class = "btn btn-info" })
-                    </div>*@
+            @Html.ActionLink("Create New", "Create","Owner", null, htmlAttributes: new { @class = "btn btn-info" })
+        </div>*@
                     <div class="col-md-8">
                         @using (Html.BeginForm())
                         {
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="col-md-6">
-                                        @Html.TextBox("SearchString", null, htmlAttributes: new { @class = "form-control" })
-                                    </div>
-                                    <div class="col-md-6"><input type="submit" value="Search" class="btn btn-success" /></div>
-                                </div>
-                            </div>
 
+                            <div class="row">
+                                <div class="col-md-4">
+                                    Category:
+                                    <select name="category" class="form-control">
+                                        @if (!(string.IsNullOrEmpty(ViewBag.SelectedCategory)))
+                                        {
+                                            <option value="@ViewBag.SelectedCategory">@ViewBag.SelectedCategory</option>
+                                        }
+                                        @foreach (var item in ViewBag.Categories)
+                                        {
+                                            <option value="@item">@item</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-md-4">Search:@Html.TextBox("SearchString", null, htmlAttributes: new { @class = "form-control" })</div>
+                                <div class="col-md-4"><input type="submit" value="Search" class="btn btn-success" style="width:300px;margin-top:20px" /></div>
+                            </div>
                         }
                     </div>
+                    <div class="col-md-2"></div>
                 </div>
             </div>
             <hr />
@@ -58,37 +68,28 @@
                                 <div class="event-card" style="width: 37rem;">
                                     <img src="@Url.Content(item.ImgPath)" class="card-img-top img-responsive" alt="..." style="width:370px; height:230px;">
                                     <div class="event-card-header">
-                                        <h5 class="event-card-title" style="text-align:center">@Html.DisplayFor(modelItem => item.Name)</h5>
+                                        <h5 class="event-card-title" style="text-align:left;">@Html.DisplayFor(modelItem => item.Name)</h5>
+
+                                        <div class="card-text">
+                                            <span class="">₦@Html.DisplayFor(modelItem => item.DailyRate)</span>
+                                            <span class="pull-right">
+                                                @{
+
+                                                    if (item.IsAvaible == true)
+                                                    {
+                                                        <span>Available</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span>Not Available</span>
+                                                    }
+                                                }
+                                            </span>
+                                        </div>
                                         <p class="card-text">@Html.DisplayFor(modelItem => item.ShortDescription)</p>
                                     </div>
-                                    <ul class="event-list-group list-group-flush">
-                                        <li class="event-list-group-item" style="text-align:center">
-                                            @{
-
-                                                if (item.IsAvaible == true)
-                                                {
-                                                    <p>Available</p>
-                                                }
-                                                else
-                                                {
-                                                    <p>Not Available</p>
-                                                }
-                                            }
-
-                                        </li>
-
-                                    </ul>
-                                    @{
-                                        if (item.IsAvaible)
-                                        {
-                                            @Html.ActionLink("Order Now", "ComfirmOrder", "Equipment", new { id = item.Id }, htmlAttributes: new { @class = "btn event-btn " })
-                                        }
-                                        else
-                                        {
-                                            @Html.ActionLink("Order Now", "ComfirmOrder", "Equipment", new { id = item.Id }, htmlAttributes: new { @class = "btn event-btn disabled" })
-                                        }
-                                    }
-                                    @*@Html.ActionLink("Learn More", "Details", new { id = item.Id }, new { @class = "btn event-btn" })*@
+                                    
+                                    
 
                                 </div>
                             </a>

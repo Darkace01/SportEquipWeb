@@ -3,81 +3,65 @@
     ViewBag.Title = "ComfirmOrder";
 }
 
-<div>
-    <h1>Do you want to Order this Equipment</h1>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
+<div class="container">
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
+        <div style=" border-width:medium; padding:20px;">
+            <h2 class="">@Html.DisplayFor(model => model.Name)</h2>
+            <p>@Html.DisplayFor(model => model.LongDescription)</p>
+            <div style="padding-bottom:5px;">
+                <span class="text-left">₦@Html.DisplayFor(model => model.DailyRate)</span>
+                <span class="text-right pull-right">
+                    @{
 
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
+                        if (ViewBag.Available == true)
+                        {
+                            <span style="color:green;">Available </span>
+                        }
+                        else
+                        {
+                            <span style="color:red;">Unavailable "Available By" @Html.DisplayFor(model => model.AvailableDate)</span>
+                        }
+                    }
+                </span>
+            </div>
+            <img src="@Url.Content(Model.ImgPath)" style="width:100%; height:300px;" />
+            <div class="row" style="padding-top: 10px;">
+                <div class="col-md-2">
+                    @if (Request.IsAuthenticated)
+                    {
+                        if (User.IsInRole("Owner"))
+                        {
+                            @Html.ActionLink("Back to List", "Index", "Owner")
+                        }
+                        else if (User.IsInRole("Admin"))
+                        {
+                            @Html.ActionLink("Back to List", "EquipmentList", "Admin")
+                        }
+                        else
+                        {
+                            @Html.ActionLink("Back to List", "Index", null, htmlAttributes: new { @class = "btn btn-info" })
+                        }
+                    }
+                    else
+                    {
+                        @Html.ActionLink("Back to List", "Index", null, htmlAttributes: new { @class = "btn btn-info" })
+                    }
+                </div>
+                <div class="col-md-2">
+                    @{
+                        if (ViewBag.Available == true)
+                        {
+                            @Html.ActionLink("Order Now", "OrderNow", new { id = Model.Id }, htmlAttributes: new { @class = "btn btn-danger" })
+                        }
+                    }
+                </div>
+            </div>
+        </div>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.ShortDescription)
-        </dt>
+    </div>
 
-        <dd>
-            @Html.DisplayFor(model => model.ShortDescription)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.LongDescription)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.LongDescription)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.AvailableDate)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.AvailableDate)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.IsAvaible)
-        </dt>
-        <dd>
-            @{
-                string available;
-                if (Model.IsAvaible == true)
-                {
-                    available = "Yes";
-                }
-                else
-                {
-                    available = "No";
-                }
-            }
-            @available
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.ImgPath)
-        </dt>
-
-        <dd>
-            <img class="img-responsive" src="@Url.Content(Model.ImgPath)" style="width:300px; height:300px;">
-        </dd>
-
-    </dl>
 </div>
-<p>
 
-    
-    @Html.ActionLink("Order Now", "OrderNow", new { id = Model.Id }, htmlAttributes: new { @class = "btn btn-danger", })
-
-    @ViewBag.Result
-    @using (Html.BeginForm())
-    {
-
-        @*<button type="submit" class="btn btn-danger" name="id" value="Model.Id">Order Now</button>*@
-    }
-
-    @Html.ActionLink("Back to List", "Index")
-</p>
 
 

@@ -10,25 +10,24 @@ namespace SportEquipWeb.Controllers
     public class HomeController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
-        public ActionResult Index(string searchString)
+        public ActionResult Index(string searchString, string category)
         {
             var equipment = (from s in db.Equipment
                              select s).Where(e => e.IsDeleted == false);
             if (!String.IsNullOrEmpty(searchString))
             {
-                try
-                {
-                    equipment = equipment.Where(s => s.Name.ToLower().Contains(searchString.ToLower())
-                                                 || s.Owner.UserName.ToLower().Contains(searchString.ToLower())
-                                                 || s.Category.ToLower().Contains(searchString.ToLower())
-                                                 );
-                }
-                catch (Exception ex)
-                {
+                equipment = equipment.Where(s => s.Name.ToLower().Contains(searchString.ToLower())
+                                             || s.Category.ToLower().Contains(searchString.ToLower())
+                                             );
 
-                    throw;
-                }
             }
+
+            if (!(String.IsNullOrEmpty(category)) && category != "All")
+            {
+                equipment = equipment.Where(s => s.Category.ToLower() == category.ToLower());
+            }
+
+
             foreach (var item in equipment.ToList())
             {
                 int res = item.AvailableDate.CompareTo(DateTime.Now);
@@ -43,6 +42,15 @@ namespace SportEquipWeb.Controllers
                 else
                     item.IsAvaible = true;
             }
+            List<string> categories = new List<string>()
+            {
+                "All","Field","Track"
+            };
+            ViewBag.SelectedCategory = category;
+            categories.Remove(category);
+            ViewBag.Categories = categories;
+
+
             return View(equipment.ToList());
         }
 

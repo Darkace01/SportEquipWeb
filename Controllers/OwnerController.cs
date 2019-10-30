@@ -154,6 +154,7 @@ namespace SportEquipWeb.Controllers
             {
                 try
                 {
+                    
                     Equipment equipment = db.Equipment.Find(eqViewModel.Id);
                     string previousImagePath = "";
                     if (eqViewModel.ImgFile != null)
@@ -236,6 +237,7 @@ namespace SportEquipWeb.Controllers
             int idPassed = id;
             try
             {
+                
                 Equipment equipment = db.Equipment.Find(id);
 
                 equipment.IsDeleted = true;

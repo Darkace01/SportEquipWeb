@@ -148,6 +148,7 @@ namespace SportEquipWeb.Controllers
             string imgPath = "";
             try
             {
+                
                 Equipment equipment = db.Equipment.Find(id);
                 imgPath = equipment.ImgPath;
                 equipment.IsDeleted = true;
@@ -179,6 +180,7 @@ namespace SportEquipWeb.Controllers
             }
             try
             {
+                
                 Equipment equipment = db.Equipment.Find(id);
                 if (equipment == null || equipment.IsDeleted == true)
                 {
@@ -209,7 +211,7 @@ namespace SportEquipWeb.Controllers
             catch (Exception)
             {
                 OrderError = "Failed to Order. Try again";
-                return RedirectToAction("ConfirmOrder", new { id = idPassed });
+                return RedirectToAction("ComfirmOrder", new { id = idPassed });
             }
             return RedirectToAction("OrderComfirmation");
         }

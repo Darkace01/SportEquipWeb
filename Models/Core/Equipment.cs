@@ -16,9 +16,9 @@ namespace SportEquipWeb.Models.Core
         public string ApplicationUserId { get; set; }
         
         public virtual ApplicationUser Owner { get; set; }
-        [Display(Name = "Short Description")]
+        [Display(Name = "Intro")]
         public string ShortDescription { get; set; }
-        [Display(Name = "Long Description")]
+        [Display(Name = "Details")]
         public string LongDescription { get; set; }
         [Display(Name ="Is Available ?")]
         public bool IsAvaible { get; set; }

@@ -26,21 +26,24 @@
 
     @foreach (var item in Model)
     {
-        <tr>
+<tr>
 
-            <td>
-                @Html.DisplayFor(modelItem => item.Equipment.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.User.UserName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Equipment.ShortDescription)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateCreated)
-            </td>
-        </tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.Equipment.Name)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.User.UserName)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.NumberOfDaysRented)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Equipment.ShortDescription)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.DateCreated)
+    </td>
+</tr>
     }
 
 </table>

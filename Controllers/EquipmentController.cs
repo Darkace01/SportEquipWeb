@@ -197,13 +197,14 @@ namespace SportEquipWeb.Controllers
 
                 string userId = User.Identity.GetUserId();
                 ApplicationUser applicationUser = db.Users.Find(userId);
-               
+
 
                 Transaction transaction = new Transaction()
                 {
                     Equipment = equipment,
                     User = applicationUser,
                     DateCreated = DateTime.Now,
+                    NumberOfDaysRented = days,
                 };
                 db.Transactions.Add(transaction);
                 db.SaveChanges();

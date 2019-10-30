@@ -16,7 +16,13 @@
             @Html.Label("Equipment Owner")
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.DateCreated)
+            @Html.DisplayName("Day Rented")
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NumberOfDaysRented)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NumberOfDaysRented)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Equipment.ShortDescription)
@@ -29,24 +35,27 @@
 
     @foreach (var item in Model)
     {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Equipment.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Equipment.Owner.UserName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateCreated)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Equipment.ShortDescription)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.User.UserName)
-            </td>
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.Equipment.Name)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Equipment.Owner.UserName)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.DateCreated)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.NumberOfDaysRented)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Equipment.ShortDescription)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.User.UserName)
+    </td>
 
-        </tr>
+</tr>
     }
 
 </table>

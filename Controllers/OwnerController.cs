@@ -22,6 +22,8 @@ namespace SportEquipWeb.Controllers
         };
         private static string editEquipError = "";
         private static string deleteEquipError = "";
+        private static string createEquipError = "";
+        private static Equipment createEquip= null;
         // GET: Owner
         public ActionResult Index()
         {
@@ -44,7 +46,14 @@ namespace SportEquipWeb.Controllers
         public ActionResult Create()
         {
             ViewBag.Categories = Categories;
-                   
+
+            if (createEquip != null)
+            {
+                ViewBag.Error = createEquipError;
+                //createEquip = null;
+                return View(createEquip);
+                
+            }
             return View();
         }
 
@@ -63,7 +72,7 @@ namespace SportEquipWeb.Controllers
             {
                 try
                 {
-
+                    
                     if (equipment.ImgFile != null)
                     {
                         string fileName = Path.GetFileNameWithoutExtension(equipment.ImgFile.FileName);
@@ -86,8 +95,9 @@ namespace SportEquipWeb.Controllers
                 catch (Exception ex)
                 {
                     //yet to handle
-                    TempData["CreateError"] = "Failed to create equipment. Try again";
-                    return RedirectToAction("Create", equipment.Id);
+                    createEquipError = "Failed to create equipment. Try again";
+                    createEquip = equipment;
+                    return RedirectToAction("Create");
                     //throw;
                 }
             }

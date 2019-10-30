@@ -19,6 +19,9 @@ namespace SportEquipWeb.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
         private ApplicationUserManager _userManager;
+
+        private static string InAvailableEquipmentError = "";
+
         public EquipmentController(ApplicationUserManager userManager)
         {
 
@@ -110,6 +113,7 @@ namespace SportEquipWeb.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.Inavailable= InAvailableEquipmentError;
             return View(equipment);
         }
 
@@ -159,9 +163,9 @@ namespace SportEquipWeb.Controllers
             return RedirectToAction("Index");
         }
 
-        [Authorize(Roles = "User")]
+        //[Authorize(Roles = "User")]
         [HttpPost]
-        public ActionResult OrderNow(int days,int id = 0)
+        public ActionResult OrderNow(int days,int id = 4)
         {
             if (id == 0)
             {
@@ -173,6 +177,12 @@ namespace SportEquipWeb.Controllers
                 if (equipment == null || equipment.IsDeleted == true)
                 {
                     return HttpNotFound();
+                }
+
+                if (equipment.AvailableDate > DateTime.Now)
+                {
+                    InAvailableEquipmentError = "Product is not available";
+                    return RedirectToAction("Details",new {id = equipment.Id });
                 }
                 equipment.AvailableDate = DateTime.Now.AddDays(days);
                 db.Entry(equipment).State = EntityState.Modified;

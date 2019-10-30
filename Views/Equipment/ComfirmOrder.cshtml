@@ -14,7 +14,7 @@
                 <span class="text-right pull-right">
                     @{
 
-                        if (ViewBag.Available == true)
+                        if (Model.IsAvaible == true)
                         {
                             <span style="color:green;">Available </span>
                         }
@@ -32,11 +32,11 @@
                     {
                         if (User.IsInRole("Owner"))
                         {
-                            @Html.ActionLink("Back to List", "Index", "Owner")
+                            @Html.ActionLink("Back to List", "Index", "Owner", htmlAttributes: new { @class = "btn btn-info" })
                         }
                         else if (User.IsInRole("Admin"))
                         {
-                            @Html.ActionLink("Back to List", "EquipmentList", "Admin")
+                            @Html.ActionLink("Back to List", "EquipmentList", "Admin", htmlAttributes: new { @class = "btn btn-info" })
                         }
                         else
                         {
@@ -49,23 +49,26 @@
                     }
                 </div>
 
-
-                @using (Html.BeginForm("OrderNow", "Equipment", FormMethod.Post))
+                @if (Model.IsAvaible == true)
                 {
-            <div class="col-md-4">
-                <input type="number" name="days" min="1" class="form-control" placeholder="number of days" id="days"
-                        />
-                <input type="hidden" name="id" value="@Model.Id" />
-                <input type="hidden" name="dailyRate" value="@Model.DailyRate" id="dailyRate"/>
+                    using (Html.BeginForm("OrderNow", "Equipment", FormMethod.Post))
+                    {
+                        <div class="col-md-4">
+                            <input type="number" name="days" min="1" class="form-control" placeholder="number of days" id="days" />
+                            <input type="hidden" name="id" value="@Model.Id" />
+                            <input type="hidden" name="dailyRate" value="@Model.DailyRate" id="dailyRate" />
 
-            </div>
+                        </div>
 
-                    <div class="col-md-2">
-                        <input type="submit" value="Order Now" class="form-control btn btn-success" id="orderBtn"/>
-                    </div>
+                        <div class="col-md-2">
+                            <input type="submit" value="Order Now" class="form-control btn btn-success" id="orderBtn" />
+                        </div>
 
+                    }
+                    <p style="color:red;" id="daysValidation"></p>
                 }
-                <p style="color:red;" id="daysValidation"></p>
+
+
             </div>
             <div>
                 <p id="price" style="font-size:30px;color:forestgreen"></p>
@@ -96,7 +99,7 @@
     days.addEventListener("input", writeAge);
     function writeAge() {
         if (days.value > 0) {
-            price.textContent = dailyRate.value * days.value;
+            price.textContent = "Price: "+ dailyRate.value * days.value+" Naira";
         }
         else {
             price.textContent = 0;

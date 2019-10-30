@@ -4,6 +4,8 @@
     ViewBag.Title = "Details";
 }
 
+<hr />
+<h3 style="color:red">@ViewBag.Inavailable</h3>
 
 <div>
 
@@ -37,11 +39,11 @@
                         {
                             if (User.IsInRole("Owner"))
                             {
-                                @Html.ActionLink("Back to List", "Index", "Owner")
+                                @Html.ActionLink("Back to List", "Index", "Owner", null, htmlAttributes: new { @class = "btn btn-info" })
                             }
                             else if (User.IsInRole("Admin"))
                             {
-                                @Html.ActionLink("Back to List", "EquipmentList", "Admin")
+                                @Html.ActionLink("Back to List", "EquipmentList", "Admin", null, htmlAttributes: new { @class = "btn btn-info" })
                             }
                             else
                             {

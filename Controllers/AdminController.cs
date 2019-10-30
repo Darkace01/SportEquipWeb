@@ -154,7 +154,7 @@ namespace SportEquipWeb.Controllers
             
             try
             {
-                throw new DivideByZeroException();
+                
                 ApplicationUser applicationUser = db.Users.Find(id);
                 if (applicationUser == null)
                 {

@@ -59,10 +59,12 @@ namespace SportEquipWeb.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Equipment equipment = db.Equipment.Find(id);
-
+            int idPassed = id;
             try
             {
+                
+                Equipment equipment = db.Equipment.Find(id);
+
                 equipment.IsDeleted = true;
                 db.Entry(equipment).State = EntityState.Modified;
                 db.SaveChanges();
@@ -76,7 +78,7 @@ namespace SportEquipWeb.Controllers
             catch (Exception)
             {
                 deleteEquipError = "Delete Failed. Try again. If problem persists, contact administrator";
-                return RedirectToAction("Delete", new { id = equipment.Id });
+                return RedirectToAction("Delete", new { id = idPassed });
             }
 
             return RedirectToAction("EquipmentList");
@@ -99,15 +101,17 @@ namespace SportEquipWeb.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-
-            ApplicationUser applicationUser = db.Users.Find(id);
-            if (applicationUser == null)
-            {
-                return HttpNotFound();
-            }
-
+            
             try
             {
+                
+                ApplicationUser applicationUser = db.Users.Find(id);
+                if (applicationUser == null)
+                {
+                    return HttpNotFound();
+                }
+
+
                 applicationUser.IsEnabled = true;
                 db.Entry(applicationUser).State = EntityState.Modified;
                 db.SaveChanges();
@@ -140,19 +144,23 @@ namespace SportEquipWeb.Controllers
         
         public ActionResult LockOutConfirmed(string id)
         {
+            string idPassed = id;
+
             if (String.IsNullOrEmpty(id))
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            ApplicationUser applicationUser = db.Users.Find(id);
-            if (applicationUser == null)
-            {
-                return HttpNotFound();
-            }
-
+            
             try
             {
+                throw new DivideByZeroException();
+                ApplicationUser applicationUser = db.Users.Find(id);
+                if (applicationUser == null)
+                {
+                    return HttpNotFound();
+                }
+
                 applicationUser.IsEnabled = false;
                 db.Entry(applicationUser).State = EntityState.Modified;
                 db.SaveChanges();
@@ -160,7 +168,7 @@ namespace SportEquipWeb.Controllers
             catch (Exception)
             {
                 lockUserError = "Lock failed. Try again. If problem persists, contact administrator";
-                return RedirectToAction("LockUser", new { id = applicationUser.Id });
+                return RedirectToAction("LockUser", new { id = idPassed });
             }
             return RedirectToAction("AllUsers");
 

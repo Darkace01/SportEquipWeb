@@ -63,10 +63,19 @@ namespace SportEquipWeb.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Owner")]
-        public ActionResult Create([Bind(Include = "Id,Name,ShortDescription,LongDescription,ImgFile,ApplicationUserId,Owner,CategoryId,Category,DailyRate")] Equipment equipment)
+        public ActionResult Create([Bind(Include = "Id,Name,LongDescription,ImgFile,ApplicationUserId,Owner,CategoryId,Category,DailyRate")] Equipment equipment)
         {
+            ViewBag.Categories = Categories;
+
             string userId = User.Identity.GetUserId();
             ApplicationUser applicationUser = db.Users.Find(userId);
+            
+
+            if (applicationUser == null)
+            {
+                ViewBag.Error = "This account does not exist, please logout and login again";
+                return View(equipment);
+            }
 
             if (ModelState.IsValid)
             {
@@ -101,7 +110,7 @@ namespace SportEquipWeb.Controllers
                     //throw;
                 }
             }
-            ViewBag.Categories = Categories;
+         
             return View(equipment);
         }
 
@@ -134,7 +143,7 @@ namespace SportEquipWeb.Controllers
             {
                 Id = equipment.Id,
                 Name=equipment.Name,
-                ShortDescription=equipment.ShortDescription,
+                ShortDescription=equipment.LongDescription,
                 LongDescription=equipment.LongDescription,
                 ImgPath=equipment.ImgPath,
                 
@@ -180,7 +189,7 @@ namespace SportEquipWeb.Controllers
                     }
 
                     equipment.Name = eqViewModel.Name;
-                    equipment.ShortDescription = eqViewModel.ShortDescription;
+                    //equipment.ShortDescription = eqViewModel.ShortDescription;
                     equipment.LongDescription = eqViewModel.LongDescription;
                     
                     equipment.IsAvaible = eqViewModel.IsAvaible;

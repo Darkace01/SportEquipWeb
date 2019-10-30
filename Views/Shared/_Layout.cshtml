@@ -17,15 +17,16 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("Equip. Mgt.", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("Dashboard", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("List your Equipment for Rental", "Create", "Owner")</li>
-                    @*<li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>*@
-                    <li>@Html.ActionLink("Browse Equipment","Index","Equipment",null,htmlAttributes: new { @class="btn btn-danger"})</li>
+                    @*<li></li>
+            <li>@Html.ActionLink("Contact", "Contact", "Home")</li>*@
+                    <li>@Html.ActionLink("Browse Equipment", "Index", "Equipment", null, htmlAttributes: new { @class = "btn btn-danger" })</li>
                 </ul>
+              
                 @Html.Partial("_LoginPartial")
             </div>
         </div>

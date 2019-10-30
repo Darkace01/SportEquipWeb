@@ -30,17 +30,14 @@ namespace SportEquipWeb.Controllers
 
             foreach (var item in equipment.ToList())
             {
-                int res = item.AvailableDate.CompareTo(DateTime.Now);
-                if (res > 0)
+                if (item.AvailableDate <= DateTime.Now)
                 {
-                    item.IsAvaible = false;
-                }
-                else if (res == 0)
-                {
-                    item.IsAvaible = false;
+                    item.IsAvaible = true;
                 }
                 else
-                    item.IsAvaible = true;
+                {
+                    item.IsAvaible = false;
+                }
             }
             List<string> categories = new List<string>()
             {

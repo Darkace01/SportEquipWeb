@@ -62,17 +62,15 @@ namespace SportEquipWeb.Controllers
 
             foreach (var item in equipment.ToList())
             {
-                int res = item.AvailableDate.CompareTo(DateTime.Now);
-                if (res > 0)
+                if (item.AvailableDate <= DateTime.Now)
                 {
-                    item.IsAvaible = false;
-                }
-                else if (res == 0)
-                {
-                    item.IsAvaible = false;
+                    item.IsAvaible = true;
                 }
                 else
-                    item.IsAvaible = true;
+                {
+                    item.IsAvaible = false;
+                }
+               
             }
             List<string> categories = new List<string>()
             {
@@ -99,15 +97,14 @@ namespace SportEquipWeb.Controllers
                 return HttpNotFound();
             }
 
-            int res = equipment.AvailableDate.CompareTo(DateTime.Now);
-            if (res > 0)
+            if (equipment.AvailableDate <= DateTime.Now)
             {
-                ViewBag.Available = false;
-            }else if(res == 0){
-                ViewBag.Available = false;
+                equipment.IsAvaible = true;
             }
             else
-                ViewBag.Available = true;
+            {
+                equipment.IsAvaible = false;
+            }
 
             if (equipment == null)
             {
@@ -163,7 +160,8 @@ namespace SportEquipWeb.Controllers
         }
 
         [Authorize(Roles = "User")]
-        public ActionResult OrderNow(int id = 0)
+        [HttpPost]
+        public ActionResult OrderNow(int days,int id = 0)
         {
             if (id == 0)
             {
@@ -176,10 +174,12 @@ namespace SportEquipWeb.Controllers
                 {
                     return HttpNotFound();
                 }
+                equipment.AvailableDate = DateTime.Now.AddDays(days);
+                db.Entry(equipment).State = EntityState.Modified;
 
                 string userId = User.Identity.GetUserId();
                 ApplicationUser applicationUser = db.Users.Find(userId);
-
+               
 
                 Transaction transaction = new Transaction()
                 {
@@ -211,17 +211,15 @@ namespace SportEquipWeb.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            int res = equipment.AvailableDate.CompareTo(DateTime.Now);
-            if (res > 0)
+
+            if (equipment.AvailableDate <= DateTime.Now)
             {
-                equipment.IsAvaible = false;
-            }
-            else if (res == 0)
-            {
-                equipment.IsAvaible = false;
+                equipment.IsAvaible = true;
             }
             else
-                equipment.IsAvaible = true;
+            {
+                equipment.IsAvaible = false;
+            }
 
             if (equipment == null)
             {

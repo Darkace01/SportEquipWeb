@@ -2,7 +2,7 @@
 @{
     ViewBag.Title = "ComfirmOrder";
 }
-
+    <script src="https://unpkg.com/jquery@3.3.1/dist/jquery.js"></script>
 <div class="container">
     <div class="col-md-2"></div>
     <div class="col-md-8">
@@ -48,15 +48,29 @@
                         @Html.ActionLink("Back to List", "Index", null, htmlAttributes: new { @class = "btn btn-info" })
                     }
                 </div>
-                <div class="col-md-2">
-                    @{
-                        if (ViewBag.Available == true)
-                        {
-                            @Html.ActionLink("Order Now", "OrderNow", new { id = Model.Id }, htmlAttributes: new { @class = "btn btn-danger" })
-                        }
-                    }
-                </div>
+
+
+                @using (Html.BeginForm("OrderNow", "Equipment", FormMethod.Post))
+                {
+            <div class="col-md-4">
+                <input type="number" name="days" min="1" class="form-control" placeholder="number of days" id="days"
+                        />
+                <input type="hidden" name="id" value="@Model.Id" />
+                <input type="hidden" name="dailyRate" value="@Model.DailyRate" id="dailyRate"/>
+
             </div>
+
+                    <div class="col-md-2">
+                        <input type="submit" value="Order Now" class="form-control btn btn-success" id="orderBtn"/>
+                    </div>
+
+                }
+                <p style="color:red;" id="daysValidation"></p>
+            </div>
+            <div>
+                <p id="price" style="font-size:30px;color:forestgreen"></p>
+            </div>
+
         </div>
 
     </div>
@@ -64,4 +78,28 @@
 </div>
 
 
+<script>
+    var orderBtn = document.getElementById("orderBtn");
+    var daysValidation = document.getElementById("daysValidation");
+    var days = document.getElementById("days");
+    var price = document.getElementById("price");
+    var dailyRate = document.getElementById("dailyRate");
 
+    orderBtn.addEventListener("click", function () {
+        if (days.value == null || days.value == "" || days.value < 0) {
+            daysValidation.textContent = "invalid number of days";
+            event.returnValue = false;
+        }
+        
+    })
+   
+    days.addEventListener("input", writeAge);
+    function writeAge() {
+        if (days.value > 0) {
+            price.textContent = dailyRate.value * days.value;
+        }
+        else {
+            price.textContent = 0;
+        }
+    }
+</script>

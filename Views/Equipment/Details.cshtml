@@ -19,7 +19,7 @@
                     <span class="text-right pull-right">
                         @{
 
-                            if (ViewBag.Available == true)
+                            if (Model.IsAvaible == true)
                             {
                                 <span style="color:green;">Available </span>
                             }
@@ -55,7 +55,7 @@
                     </div>
                     <div class="col-md-2">
                         @{
-                            if (ViewBag.Available == true)
+                            if (Model.IsAvaible == true)
                             {
                                 @Html.ActionLink("Order Now", "ComfirmOrder", new { id = Model.Id }, htmlAttributes: new { @class = "btn btn-danger" })
                             }

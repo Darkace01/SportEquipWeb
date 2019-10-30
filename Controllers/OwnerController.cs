@@ -52,7 +52,7 @@ namespace SportEquipWeb.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Owner")]
-        public ActionResult Create([Bind(Include = "Id,Name,ShortDescription,LongDescription,AvailableDate,ImgFile,ApplicationUserId,Owner,CategoryId,Category,DailyRate")] Equipment equipment)
+        public ActionResult Create([Bind(Include = "Id,Name,ShortDescription,LongDescription,ImgFile,ApplicationUserId,Owner,CategoryId,Category,DailyRate")] Equipment equipment)
         {
             string userId = User.Identity.GetUserId();
             ApplicationUser applicationUser = db.Users.Find(userId);
@@ -75,6 +75,7 @@ namespace SportEquipWeb.Controllers
                     equipment.ApplicationUserId = userId;
                     equipment.Owner = applicationUser;
                     equipment.IsDeleted = false;
+                    equipment.AvailableDate = DateTime.Now;
                     db.Equipment.Add(equipment);
 
                     db.SaveChanges();
@@ -124,7 +125,7 @@ namespace SportEquipWeb.Controllers
                 ShortDescription=equipment.ShortDescription,
                 LongDescription=equipment.LongDescription,
                 ImgPath=equipment.ImgPath,
-                AvailableDate=equipment.AvailableDate,
+                
                 DailyRate=equipment.DailyRate,
             };
 
@@ -143,7 +144,7 @@ namespace SportEquipWeb.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]       
-        public ActionResult Edit([Bind(Include = "Id,Name,ShortDescription,LongDescription,AvailableDate,Category,ImgFile,DailyRate")]EquipmentViewModel eqViewModel)
+        public ActionResult Edit([Bind(Include = "Id,Name,ShortDescription,LongDescription,Category,ImgFile,DailyRate")]EquipmentViewModel eqViewModel)
         {
 
             if (ModelState.IsValid)
@@ -167,7 +168,7 @@ namespace SportEquipWeb.Controllers
                     equipment.Name = eqViewModel.Name;
                     equipment.ShortDescription = eqViewModel.ShortDescription;
                     equipment.LongDescription = eqViewModel.LongDescription;
-                    equipment.AvailableDate = eqViewModel.AvailableDate;
+                    
                     equipment.IsAvaible = eqViewModel.IsAvaible;
                     equipment.DailyRate = eqViewModel.DailyRate;
                     equipment.Category = eqViewModel.Category;

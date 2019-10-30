@@ -15,6 +15,12 @@ namespace SportEquipWeb.Controllers
     public class AdminController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
+        private static string deleteEquipError = "";
+        private static string unlockUserError = "";
+        private static string lockUserError = "";
+
+
+
         // GET: Admin
         public ActionResult Index()
         {
@@ -42,8 +48,8 @@ namespace SportEquipWeb.Controllers
                 return HttpNotFound();
             }
 
-            ViewBag.Error = TempData["DeleteError"];
-
+            ViewBag.Error = deleteEquipError;
+            deleteEquipError = "";
 
             return View(equipment);
         }
@@ -69,8 +75,8 @@ namespace SportEquipWeb.Controllers
             }
             catch (Exception)
             {
-                TempData["DeleteError"] = "Delete Failed. Try again. If problem persists, contact administrator";
-                return RedirectToAction("Delete", id);
+                deleteEquipError = "Delete Failed. Try again. If problem persists, contact administrator";
+                return RedirectToAction("Delete", new { id = equipment.Id });
             }
 
             return RedirectToAction("EquipmentList");
@@ -82,7 +88,8 @@ namespace SportEquipWeb.Controllers
             var allUsers = (from s in db.Users
                             select s).Where(u => u.UserName != "admin@gmail.com").ToList();
 
-            ViewBag.Error = TempData["UnlockUserError"];
+            ViewBag.Error = unlockUserError;
+            unlockUserError = "";
             return View(allUsers.ToList());
         }
 
@@ -108,7 +115,7 @@ namespace SportEquipWeb.Controllers
             catch (Exception)
             {
 
-                TempData["UnlockUserError"] = "Unlock user failed. Try again. If problem persists, contact administrator";
+                unlockUserError = "Unlock user failed. Try again. If problem persists, contact administrator";
                 return RedirectToAction("AllUsers");
             }
             return RedirectToAction("AllUsers");
@@ -126,7 +133,8 @@ namespace SportEquipWeb.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.Error = TempData["LockUserError"];
+            ViewBag.Error = lockUserError;
+            lockUserError = "";
             return View(applicationUser);
         }
         
@@ -151,8 +159,8 @@ namespace SportEquipWeb.Controllers
             }
             catch (Exception)
             {
-                TempData["LockUserError"] = "Lock failed. Try again. If problem persists, contact administrator";
-                return RedirectToAction("LockUser", id);
+                lockUserError = "Lock failed. Try again. If problem persists, contact administrator";
+                return RedirectToAction("LockUser", new { id = applicationUser.Id });
             }
             return RedirectToAction("AllUsers");
 

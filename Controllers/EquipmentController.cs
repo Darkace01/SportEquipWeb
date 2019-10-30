@@ -21,6 +21,8 @@ namespace SportEquipWeb.Controllers
         private ApplicationUserManager _userManager;
 
         private static string InAvailableEquipmentError = "";
+        private static string DeleteEquipError = "";
+        private static string OrderError = "";
 
         public EquipmentController(ApplicationUserManager userManager)
         {
@@ -114,6 +116,7 @@ namespace SportEquipWeb.Controllers
                 return HttpNotFound();
             }
             ViewBag.Inavailable= InAvailableEquipmentError;
+            InAvailableEquipmentError = "";
             return View(equipment);
         }
 
@@ -130,7 +133,8 @@ namespace SportEquipWeb.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.Error = TempData["DeleteEquipError"];
+            ViewBag.Error = DeleteEquipError;
+            DeleteEquipError = "";
             return View(equipment);
         }
 
@@ -140,6 +144,7 @@ namespace SportEquipWeb.Controllers
         [Authorize(Roles = "Owner,Admin")]
         public ActionResult DeleteConfirmed(int id)
         {
+            int idPassed = id;
             string imgPath = "";
             try
             {
@@ -151,8 +156,8 @@ namespace SportEquipWeb.Controllers
             }
             catch (Exception)
             {
-                TempData["DeleteEquipError"] = "Error occured while deleteing equipment. Try again. If error persists, contact administrator";
-                return RedirectToAction("Delete", id);
+                DeleteEquipError = "Error occured while deleteing equipment. Try again. If error persists, contact administrator";
+                return RedirectToAction("Delete", new { id=idPassed});
             }
 
             string path = Request.MapPath(imgPath);
@@ -165,8 +170,9 @@ namespace SportEquipWeb.Controllers
 
         //[Authorize(Roles = "User")]
         [HttpPost]
-        public ActionResult OrderNow(int days,int id = 4)
+        public ActionResult OrderNow(int days,int id = 0)
         {
+            int idPassed = id;
             if (id == 0)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -202,8 +208,8 @@ namespace SportEquipWeb.Controllers
             }
             catch (Exception)
             {
-                TempData["OrderError"] = "Failed to Order. Try again";
-                return RedirectToAction("ConfirmOrder", id);
+                OrderError = "Failed to Order. Try again";
+                return RedirectToAction("ConfirmOrder", new { id = idPassed });
             }
             return RedirectToAction("OrderComfirmation");
         }
@@ -235,7 +241,8 @@ namespace SportEquipWeb.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.Error = TempData["OrderError"];
+            ViewBag.Error = OrderError;
+            OrderError = "";
             return View(equipment);
         }
         [Authorize(Roles = "User")]

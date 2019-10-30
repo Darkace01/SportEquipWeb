@@ -2,7 +2,13 @@
 @{
     ViewBag.Title = "ComfirmOrder";
 }
-    <script src="https://unpkg.com/jquery@3.3.1/dist/jquery.js"></script>
+
+
+
+<hr />
+<h3 style="color:red">@ViewBag.Error</h3>
+
+<script src="https://unpkg.com/jquery@3.3.1/dist/jquery.js"></script>
 <div class="container">
     <div class="col-md-2"></div>
     <div class="col-md-8">
@@ -93,13 +99,13 @@
             daysValidation.textContent = "invalid number of days";
             event.returnValue = false;
         }
-        
+
     })
-   
+
     days.addEventListener("input", writeAge);
     function writeAge() {
         if (days.value > 0) {
-            price.textContent = "Price: "+ dailyRate.value * days.value+" Naira";
+            price.textContent = "Price: " + dailyRate.value * days.value + " Naira";
         }
         else {
             price.textContent = 0;

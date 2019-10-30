@@ -20,6 +20,8 @@ namespace SportEquipWeb.Controllers
         {
             "Track","Field"
         };
+        private static string editEquipError = "";
+        private static string deleteEquipError = "";
         // GET: Owner
         public ActionResult Index()
         {
@@ -134,7 +136,8 @@ namespace SportEquipWeb.Controllers
             Categories.Remove(equipment.Category);
             ViewBag.Categories = Categories;
 
-            ViewBag.Error=TempData["EditError"];
+            ViewBag.Error = editEquipError;
+            editEquipError = "";
 
             return View(eq);
         }
@@ -187,8 +190,8 @@ namespace SportEquipWeb.Controllers
                 }
                 catch (Exception)
                 {
-                    TempData["EditError"] = "Error occured while editing equipment. Try again.";
-                    return RedirectToAction("Edit", eqViewModel.Id);
+                    editEquipError = "Error occured while editing equipment. Try again.";
+                    return RedirectToAction("Edit", new { id = eqViewModel.Id });
                     //throw;
                 }
             }
@@ -219,7 +222,8 @@ namespace SportEquipWeb.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.Error = TempData["DeleteError"];
+            ViewBag.Error = deleteEquipError;
+            deleteEquipError = "";
             return View(equipment);
         }
 
@@ -229,6 +233,7 @@ namespace SportEquipWeb.Controllers
         [Authorize(Roles = "Owner")]
         public ActionResult DeleteConfirmed(int id)
         {
+            int idPassed = id;
             try
             {
                 Equipment equipment = db.Equipment.Find(id);
@@ -244,8 +249,8 @@ namespace SportEquipWeb.Controllers
             }
             catch (Exception)
             {
-                TempData["DeleteError"] = "Error occured while deleting. Try again.";
-                return RedirectToAction("Delete",id);
+                deleteEquipError = "Error occured while deleting. Try again.";
+                return RedirectToAction("Delete",new { id = idPassed });
                 
                 //throw;
             }

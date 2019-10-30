@@ -205,6 +205,7 @@ namespace SportEquipWeb.Controllers
                     User = applicationUser,
                     DateCreated = DateTime.Now,
                     NumberOfDaysRented = days,
+                    Amount = equipment.DailyRate * days,
                 };
                 db.Transactions.Add(transaction);
                 db.SaveChanges();

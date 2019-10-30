@@ -12,6 +12,7 @@ namespace SportEquipWeb.Models.Core
         public Equipment Equipment { get; set; }
         [Display(Name ="Number of days rented")]
         public int NumberOfDaysRented { get; set; }
+        public decimal Amount { get; set; }
         public ApplicationUser User { get; set; }
         public DateTime DateCreated { get; set; }
 

@@ -21,8 +21,9 @@
         <th>
             @Html.DisplayNameFor(model => model.NumberOfDaysRented)
         </th>
+ 
         <th>
-            @Html.DisplayNameFor(model => model.NumberOfDaysRented)
+            @Html.DisplayNameFor(model => model.Amount)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Equipment.ShortDescription)
@@ -47,6 +48,9 @@
     </td>
     <td>
         @Html.DisplayFor(modelItem => item.NumberOfDaysRented)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Amount)
     </td>
     <td>
         @Html.DisplayFor(modelItem => item.Equipment.ShortDescription)

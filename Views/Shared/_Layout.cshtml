@@ -21,10 +21,10 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                    <li>@Html.ActionLink("Equipments","Index","Equipment",null,htmlAttributes: new { @class="btn btn-danger"})</li>
+                    <li>@Html.ActionLink("List your Equipment for Rental", "Create", "Owner")</li>
+                    @*<li>@Html.ActionLink("About", "About", "Home")</li>
+                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>*@
+                    <li>@Html.ActionLink("Browse Equipment","Index","Equipment",null,htmlAttributes: new { @class="btn btn-danger"})</li>
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>

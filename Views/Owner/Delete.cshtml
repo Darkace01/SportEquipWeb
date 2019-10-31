@@ -23,11 +23,18 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.ShortDescription)
+            Short Description
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.ShortDescription)
+            @if (Model.LongDescription.Length > 35)
+            {
+                <td> @Model.LongDescription.Substring(0, 35) ...</td>
+            }
+            else
+            {
+                <td> @Model.LongDescription</td>
+            }
         </dd>
 
         <dt>

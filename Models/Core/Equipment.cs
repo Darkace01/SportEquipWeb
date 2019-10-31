@@ -16,8 +16,8 @@ namespace SportEquipWeb.Models.Core
         public string ApplicationUserId { get; set; }
         
         public virtual ApplicationUser Owner { get; set; }
-        [Display(Name = "Intro")]
-        public string ShortDescription { get; set; }
+        //[Display(Name = "Intro")]
+        //public string ShortDescription { get; set; }
         [Display(Name = "Details")]
         public string LongDescription { get; set; }
         [Display(Name ="Is Available ?")]
@@ -28,7 +28,8 @@ namespace SportEquipWeb.Models.Core
         [Display(Name ="Available Date")]
         public DateTime AvailableDate { get; set; }
         [Required]
-        public string Category { get; set; }
+        public int CategoryId { get; set; }
+        public Category Category { get; set; }
 
         [Range(0,double.MaxValue)]
         [Display(Name ="Daily Rate")]

@@ -23,7 +23,7 @@
             @Html.DisplayNameFor(model => model.Amount)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Equipment.ShortDescription)
+            Short Description
         </th>
         <th>
             @Html.Label("Date Order")
@@ -43,17 +43,24 @@
     <td>
         @Html.DisplayFor(modelItem => item.NumberOfDaysRented)
     </td>
-  
+
     <td>
         @Html.DisplayFor(modelItem => item.Amount)
     </td>
     <td>
-        @Html.DisplayFor(modelItem => item.Equipment.ShortDescription)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.DateCreated)
-    </td>
-</tr>
+        @if (item.Equipment.LongDescription.Length > 35)
+        {
+        <td> @item.Equipment.LongDescription.Substring(0, 35) ...</td>
+    }
+    else
+    {
+        <td> @item.Equipment.LongDescription</td>
+    }
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DateCreated)
+        </td>
+    </tr>
     }
 
 </table>

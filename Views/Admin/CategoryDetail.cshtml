@@ -1,0 +1,17 @@
+﻿@model SportEquipWeb.Models.Core.Category
+
+@{
+    ViewBag.Title = "CategoryDetail";
+}
+
+<h2>Category Detail</h2>
+<div class="container">
+    <p>Category Name: @Html.DisplayFor(model => model.Name)</p>
+</div>
+
+            
+
+<p>
+    @Html.ActionLink("Edit", "EditCategory", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "AllCategory")
+</p>

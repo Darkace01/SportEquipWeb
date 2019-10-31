@@ -15,7 +15,6 @@ using SportEquipWeb.Models.Core;
 namespace SportEquipWeb.Controllers
 {
 
-    [System.Runtime.InteropServices.Guid("0C722FCA-FF7B-4A42-AEED-3A99B6C2296C")]
     public class EquipmentController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -55,14 +54,14 @@ namespace SportEquipWeb.Controllers
             if (!String.IsNullOrEmpty(searchString))
             {
                 equipment = equipment.Where(s => s.Name.ToLower().Contains(searchString.ToLower())
-                                             || s.Category.Name.ToLower().Contains(searchString.ToLower())
+                                             || s.Category.ToLower().Contains(searchString.ToLower())
                                              );
 
             }
 
             if(!(String.IsNullOrEmpty(category)) && category != "All")
             {
-                equipment = equipment.Where(s => s.Category.Name.ToLower() == category.ToLower());
+                equipment = equipment.Where(s => s.Category.ToLower() == category.ToLower());
             }
 
 

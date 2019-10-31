@@ -62,7 +62,7 @@ namespace SportEquipWeb.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Owner")]
-        public ActionResult Create([Bind(Include = "Id,Name,LongDescription,ImgFile,ApplicationUserId,Owner,CategoryId,Category,DailyRate")] Equipment equipment)
+        public ActionResult Create([Bind(Include = "Id,Name,LongDescription,ImgFile,Category,ApplicationUserId,Owner,DailyRate")] Equipment equipment,string _category)
         {
             List<string> Categories = (from s in db.Category
                                        select s.Name).ToList();
@@ -94,6 +94,7 @@ namespace SportEquipWeb.Controllers
                         fileName = Path.Combine(Server.MapPath("~/Content/IMAGES/"), fileName);
                         equipment.ImgFile.SaveAs(fileName);
                     }
+                    
                     equipment.ApplicationUserId = userId;
                     equipment.Owner = applicationUser;
                     equipment.IsDeleted = false;
@@ -149,14 +150,13 @@ namespace SportEquipWeb.Controllers
                 Name=equipment.Name,
                 ShortDescription=equipment.LongDescription,
                 LongDescription=equipment.LongDescription,
-                ImgPath=equipment.ImgPath,
-                
+                ImgPath=equipment.ImgPath,                
                 DailyRate=equipment.DailyRate,
             };
 
             
             ViewBag.SelectedCategory = equipment.Category;
-            Categories.Remove(equipment.Category.Name);
+            Categories.Remove(equipment.Category);
             ViewBag.Categories = Categories;
 
             ViewBag.Error = editEquipError;
@@ -198,7 +198,7 @@ namespace SportEquipWeb.Controllers
                     
                     equipment.IsAvaible = eqViewModel.IsAvaible;
                     equipment.DailyRate = eqViewModel.DailyRate;
-                    equipment.Category.Name = eqViewModel.Category.Name;
+                    equipment.Category = eqViewModel.Category;
 
                     db.Entry(equipment).State = EntityState.Modified;
                     db.SaveChanges();

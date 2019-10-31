@@ -30,8 +30,7 @@ namespace SportEquipWeb.Models
         [Range(0, double.MaxValue)]
         public decimal DailyRate { get; set; }
         [Required]
-        public int CategoryId { get; set; }
-        public Category Category { get; set; }
+        public string Category { get; set; }
 
         [Display(Name = "Image")]
         public string ImgPath { get; set; }

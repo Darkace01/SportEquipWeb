@@ -17,14 +17,14 @@ namespace SportEquipWeb.Controllers
             if (!String.IsNullOrEmpty(searchString))
             {
                 equipment = equipment.Where(s => s.Name.ToLower().Contains(searchString.ToLower())
-                                             || s.Category.Name.ToLower().Contains(searchString.ToLower())
+                                             || s.Category.ToLower().Contains(searchString.ToLower())
                                              );
 
             }
 
             if (!(String.IsNullOrEmpty(category)) && category != "All")
             {
-                equipment = equipment.Where(s => s.Category.Name.ToLower() == category.ToLower());
+                equipment = equipment.Where(s => s.Category.ToLower() == category.ToLower());
             }
 
 

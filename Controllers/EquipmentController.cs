@@ -14,7 +14,8 @@ using SportEquipWeb.Models.Core;
 
 namespace SportEquipWeb.Controllers
 {
-    
+
+    [System.Runtime.InteropServices.Guid("0C722FCA-FF7B-4A42-AEED-3A99B6C2296C")]
     public class EquipmentController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();

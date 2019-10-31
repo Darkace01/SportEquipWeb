@@ -20,7 +20,6 @@ namespace SportEquipWeb.Controllers
         private static string lockUserError = "";
 
 
-
         // GET: Admin
         public ActionResult Index()
         {
@@ -35,6 +34,134 @@ namespace SportEquipWeb.Controllers
             return View(equipment.ToList());
         }
 
+        [HttpGet]
+        public ActionResult AllCategory()
+        {
+            var category = (from s in db.Category
+                            select s).ToList();
+            return View(category);
+        }
+        public ActionResult CreateCategory()
+        {
+            ViewBag.CreateCategoryError = TempData["CategoryCreateError"];
+            return View();
+        }
+        
+        public ActionResult CategoryDetail(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Category category = db.Category.Find(id);
+            if (category == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(category);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateCategory([Bind(Include = "Id,Name")]Category category)
+        {
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    db.Category.Add(category);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                catch (Exception ex)
+                {
+                    TempData["CategoryCreateError"] = "Failed to Create a Category";
+                    return RedirectToAction("CreateCategory");
+                }
+            }
+            return View(category);
+        }
+
+        public ActionResult EditCategory(int? id)
+        {
+            Category category = db.Category.Find(id);
+            if (category == null)
+            {
+                return HttpNotFound();
+            }
+            CategoryViewModel _category = new CategoryViewModel()
+            {
+                Name = category.Name,
+            };
+            ViewBag.CreateCategoryError = TempData["CategoryEditError"];
+            return View(_category);
+        }
+
+        [HttpPost]
+        public ActionResult EditCategory([Bind(Include = "Id,Name")]CategoryViewModel categoryView)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    Category category = db.Category.Find(categoryView.Id);
+                    if (category == null)
+                    {
+                        return HttpNotFound();
+                    }
+
+                    category.Name = categoryView.Name;
+                    db.Entry(category).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return RedirectToAction("AllCategory");
+                }
+                catch (Exception)
+                {
+                    TempData["CategoryEditError"] = "Failed to Edit a Category";
+                    return RedirectToAction("EditCategory", new { id = categoryView.Id });
+                }
+            }
+            return View(categoryView);
+        }
+        public ActionResult DeleteCategory(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Category category = db.Category.Find(id);
+            if (category == null)
+            {
+                return HttpNotFound();
+            }
+            ViewBag.CategoryDeleteError = TempData["CategoryDeleteError"];
+            return View(category);
+        }
+        [HttpPost, ActionName("DeleteCategory")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteCategoryConfirmed(int id)
+        {
+            try
+            {
+                if (id == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                Category category = db.Category.Find(id);
+                if (category == null)
+                {
+                    return HttpNotFound();
+                }
+                db.Category.Remove(category);
+                db.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                TempData["CategoryDeleteError"] = "Delete Failed. Try Again";
+            }
+            return RedirectToAction("AllCategory");
+        }
         // GET: Admin/Delete/5
         public ActionResult Delete(int? id)
         {
@@ -62,7 +189,7 @@ namespace SportEquipWeb.Controllers
             int idPassed = id;
             try
             {
-                
+
                 Equipment equipment = db.Equipment.Find(id);
 
                 equipment.IsDeleted = true;
@@ -84,7 +211,7 @@ namespace SportEquipWeb.Controllers
             return RedirectToAction("EquipmentList");
         }
 
-        
+
         public ActionResult AllUsers()
         {
             var allUsers = (from s in db.Users
@@ -101,10 +228,10 @@ namespace SportEquipWeb.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            
+
             try
             {
-                
+
                 ApplicationUser applicationUser = db.Users.Find(id);
                 if (applicationUser == null)
                 {
@@ -141,7 +268,7 @@ namespace SportEquipWeb.Controllers
             lockUserError = "";
             return View(applicationUser);
         }
-        
+
         public ActionResult LockOutConfirmed(string id)
         {
             string idPassed = id;
@@ -151,10 +278,10 @@ namespace SportEquipWeb.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            
+
             try
             {
-                
+
                 ApplicationUser applicationUser = db.Users.Find(id);
                 if (applicationUser == null)
                 {
@@ -173,7 +300,7 @@ namespace SportEquipWeb.Controllers
             return RedirectToAction("AllUsers");
 
         }
-        
+
         public ActionResult AllTransactions()
         {
             var transaction = (from s in db.Transactions

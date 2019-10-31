@@ -28,7 +28,8 @@ namespace SportEquipWeb.Models.Core
         [Display(Name ="Available Date")]
         public DateTime AvailableDate { get; set; }
         [Required]
-        public string Category { get; set; }
+        public int CategoryId { get; set; }
+        public Category Category { get; set; }
 
         [Range(0,double.MaxValue)]
         [Display(Name ="Daily Rate")]

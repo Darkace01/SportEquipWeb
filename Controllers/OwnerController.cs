@@ -16,10 +16,7 @@ namespace SportEquipWeb.Controllers
     public class OwnerController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
-        static List<string> Categories = new List<string>()
-        {
-            "Track","Field"
-        };
+        
         private static string editEquipError = "";
         private static string deleteEquipError = "";
         private static string createEquipError = "";
@@ -45,6 +42,8 @@ namespace SportEquipWeb.Controllers
         [Authorize(Roles = "Owner")]
         public ActionResult Create()
         {
+            List<string> Categories = (from s in db.Category
+                                       select s.Name).ToList();
             ViewBag.Categories = Categories;
 
             if (createEquip != null)
@@ -65,6 +64,9 @@ namespace SportEquipWeb.Controllers
         [Authorize(Roles = "Owner")]
         public ActionResult Create([Bind(Include = "Id,Name,LongDescription,ImgFile,ApplicationUserId,Owner,CategoryId,Category,DailyRate")] Equipment equipment)
         {
+            List<string> Categories = (from s in db.Category
+                                       select s.Name).ToList();
+
             ViewBag.Categories = Categories;
 
             string userId = User.Identity.GetUserId();
@@ -129,6 +131,8 @@ namespace SportEquipWeb.Controllers
        
         public ActionResult Edit(int? id)
         {
+            List<string> Categories = (from s in db.Category
+                                       select s.Name).ToList();
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -152,7 +156,7 @@ namespace SportEquipWeb.Controllers
 
             
             ViewBag.SelectedCategory = equipment.Category;
-            Categories.Remove(equipment.Category);
+            Categories.Remove(equipment.Category.Name);
             ViewBag.Categories = Categories;
 
             ViewBag.Error = editEquipError;
@@ -194,7 +198,7 @@ namespace SportEquipWeb.Controllers
                     
                     equipment.IsAvaible = eqViewModel.IsAvaible;
                     equipment.DailyRate = eqViewModel.DailyRate;
-                    equipment.Category = eqViewModel.Category;
+                    equipment.Category.Name = eqViewModel.Category.Name;
 
                     db.Entry(equipment).State = EntityState.Modified;
                     db.SaveChanges();

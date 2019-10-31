@@ -15,28 +15,36 @@
             @Html.DisplayNameFor(model => model.Owner.UserName)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.ShortDescription)
+            Short Description
         </th>
 
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-<tr>
-    <td>
-        @Html.DisplayFor(modelItem => item.Name)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.Name)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.Name)
-    </td>
-    <td>
-        @Html.ActionLink("Details", "Details","Equipment", new { id = item.Id },null) |
-        @Html.ActionLink("Delete", "Delete","Admin", new { id = item.Id },null)
-    </td>
-</tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @if (item.LongDescription.Length > 35)
+                {
+                <td> @item.LongDescription.Substring(0, 35) ...</td>
+            }
+            else
+            {
+                <td> @item.LongDescription</td>
+            }
+                </td>
+                <td>
+                    @Html.ActionLink("Details", "Details", "Equipment", new { id = item.Id }, null) |
+                    @Html.ActionLink("Delete", "Delete", "Admin", new { id = item.Id }, null)
+                </td>
+            </tr>
+        }
 
 </table>
